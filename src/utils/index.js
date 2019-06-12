@@ -31,8 +31,7 @@ export const loginUser = async (props) => {
     email: props.email,
     password: props.password
   });
-  const payload = response.data.data;
-  console.log(payload);
-  
+  const payload = response.data.data;  
   store.dispatch(getUser({ type: LOGIN_USER, payload }));
+  return payload.accessToken;
 };

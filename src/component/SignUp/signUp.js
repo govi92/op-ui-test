@@ -6,19 +6,23 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faFacebookF, faGoogle } from "@fortawesome/free-brands-svg-icons"
 import { getUser } from '../actions/index';
 import { registerUser } from '../../utils/index';
+import * as utils from '../../utils/utilityFunctions';
+import Footer from '../Footer';
 import style from './style';
 
 class SignUp extends Component {
   state = {
-    isClicked: false,
-    isLogginClicked: false,
-    isloggedIn: false,
     email: '',
     password: '',
     confPass: '',
+    type: 'op',
+    isClicked: false,
+    isLogginClicked: false,
+    isloggedIn: false,
     isEmailEmpty: false,
     isPasswordEmpty: false,
-    isErrorOccured: false
+    isErrorOccured: false,
+    isEmailValid: true,
   }
 
   confirmState = () => {
@@ -29,35 +33,63 @@ class SignUp extends Component {
 
   signUp = async (event) => {
     event.preventDefault();
-    const { email, password, confPass } = this.state;
+    const { type, email, password, confPass } = this.state;
+    console.log(utils.emailValidation(email));
+    
+    this.setState({
+      isEmailValid: utils.emailValidation(email)
+    });
 
-    if (confPass === password && confPass !== '' && password !== '' && email !== '') {
-      registerUser({ "type": "hi", email, password })
-      .then(
-        res => {
-          res && (
-            this.setState({
-              isClicked: true,
-              isEmailEmpty: false,
-              isPasswordEmpty: false
-            })
-          );
-        }
-      );
-    } else if(email === '' && password !== '') {
+    console.log(this.state.isEmailValid);
+    
+    
+    if (confPass === password && confPass !== '' && password !== '' && email !== '' && this.state.isEmailValid) {
+      registerUser({ type, email, password })
+        .then(
+          res => {
+            res && (
+              // console.log('res', res)
+              
+              this.setState({
+                isClicked: true,
+                isEmailEmpty: false,
+                isPasswordEmpty: false
+              })
+            );
+          }
+        );
+      return;
+    }
+
+    if (email === '' && password === '') {
+      this.setState({
+        isEmailEmpty: true,
+        isPasswordEmpty: true
+      });
+      return;
+    }
+
+    if (email === '') {
       this.setState({
         isEmailEmpty: true,
         isPasswordEmpty: false
       });
-    } else if(password === '' && email !== '') {
+      return;
+    }
+
+    if (password === '') {
       this.setState({
         isPasswordEmpty: true,
         isEmailEmpty: false
       });
-    } else {
+      return;
+    } 
+    
+    if (password === '' && confPass === '') {
       this.setState({
         isErrorOccured: true
       });
+      return;
     }
   }
 
@@ -67,19 +99,19 @@ class SignUp extends Component {
     });
   }
 
-  handleChange = name => event => {
+  handleEventChange = name => event => {
     this.setState({
       [name]: event.target.value
     })
   }
-  
+
 
   render() {
     if (this.state.isClicked) {
       return <Redirect to={{
         pathname: '/signup/confirm',
-        state: {email: this.state.email}
-      }}/>
+        state: { email: this.state.email }
+      }} />
     }
 
     if (this.state.isLogginClicked) {
@@ -103,10 +135,18 @@ class SignUp extends Component {
                   value={null}
                   error={this.state.isEmailEmpty}
                   fullWidth
-                  onChange={this.handleChange('email')}
+                  onChange={this.handleEventChange('email')}
                   margin="normal"
                   variant="outlined"
                 />
+                {
+                  (!this.state.isEmailEmpty && !this.state.isEmailValid) && 
+                  <div>
+                    <div style={style.errorMsg}>
+                      <p style={style.errorText}>Error: Please enter a valid email address!</p>
+                    </div>
+                  </div>
+                }
                 {
                   this.state.isEmailEmpty &&
                   <div>
@@ -123,7 +163,7 @@ class SignUp extends Component {
                   error={this.state.isPasswordEmpty | this.state.isErrorOccured}
                   value={null}
                   fullWidth
-                  onChange={this.handleChange('password')}
+                  onChange={this.handleEventChange('password')}
                   margin="normal"
                   variant="outlined"
                 />
@@ -143,7 +183,7 @@ class SignUp extends Component {
                   error={this.state.isErrorOccured}
                   value={null}
                   fullWidth
-                  onChange={this.handleChange('confPass')}
+                  onChange={this.handleEventChange('confPass')}
                   margin="normal"
                   variant="outlined"
                 />
@@ -206,11 +246,9 @@ class SignUp extends Component {
             </FormControl>
           </div>
         </div>
-        <footer style={style.footer}>
-          <h6 style={style.footerText}>Powered By</h6>
-          <h4 style={style.footerTopic}>GAPSTARS</h4>
-          <h5>{this.props.articles}</h5>
-        </footer>
+        <div>
+          <Footer />
+        </div>
       </div>
     )
   }

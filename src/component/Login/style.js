@@ -1,5 +1,3 @@
-import images from '../../assets/image';
-
 const style = {
   label: {
     marginTop: '10px'
@@ -90,7 +88,7 @@ const style = {
   },
 
   hrContainer: {
-    paddingTop: '20px'
+    paddingTop: '10px'
   },
 
   styleEight: {

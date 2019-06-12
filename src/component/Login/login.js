@@ -6,43 +6,44 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faFacebookF, faGoogle } from "@fortawesome/free-brands-svg-icons"
 import {getUser} from '../actions/index';
 import {loginUser} from '../../utils/index';
+import * as utils from '../../utils/utilityFunctions';
 import style from './style';
-import images from '../../assets/img/blur_city.jpg';
+import Footer from '../Footer';
 
 class Login extends Component {
   state = {
+    email: '',
+    password: '',
+    type: 'op',
     isClicked: false,
     isFacebookClicked: false,
     isloggedIn: false,
     isEmailEmpty:false,
     isPasswordEmpty: false,
-    email: '',
-    password: '',
-    type: 'op'
-  }
-
-  confirmState = () => {
-    this.setState({
-      isClicked: true
-    })
+    isEmailValid: true
   }
 
   login = async (event) => {
     event.preventDefault();
-    const {type, email, password} = this.state;
+    const {type, email, password } = this.state;
 
-    if(email !== '' && password !== '') {
+    this.setState({
+      isEmailValid: utils.emailValidation(email)
+    });
+
+    if(email !== '' && password !== '' && this.state.isEmailValid) {
       loginUser({type, email, password})
       .then(
-        res => console.log(res)
-      )
-      // if(res) (
-      //   this.setState({
-      //     isClicked: true,
-      //     isEmailEmpty: false,
-      //     isPasswordEmpty: false
-      //   })
-      // )
+        response => {
+          if(response) (
+            this.setState({
+              isClicked: true,
+              isEmailEmpty: false,
+              isPasswordEmpty: false
+            })
+          );
+        }
+      );
     } else if (email === '' && password !== '') {
       this.setState({
         isEmailEmpty: true
@@ -52,7 +53,10 @@ class Login extends Component {
         isPasswordEmpty: true
       })
     } else {
-      event.preventDefault();
+      this.setState({
+        isPasswordEmpty: true,
+        isEmailEmpty: true
+      })
     }
   }
 
@@ -66,18 +70,11 @@ class Login extends Component {
     if (this.state.isClicked) {
       return <Redirect to='/selections' />
     }
-    
-    if(this.state.isFacebookClicked) {
-      // return <Redirect to='/selections' />
-    }
-
-    console.log(this.state.isEmailEmpty);
-    
 
     return (
       <div style={style.containerFluid}>
         <div >
-          <div style={(this.state.isEmailEmpty | this.state.isPasswordEmpty) ? [style.formContainerExtended] : style.formContainer }>
+          <div style={(this.state.isEmailEmpty | this.state.isPasswordEmpty) ? style.formContainerExtended : style.formContainer }>
             <FormControl>
               <div>
                 <h2 style={style.topic}>LOGIN</h2>
@@ -94,6 +91,14 @@ class Login extends Component {
                   margin="normal"
                   variant="outlined"
                 />
+                {
+                  (!this.state.isEmailEmpty && !this.state.isEmailValid) &&
+                  <div>
+                    <div style={style.errorMsg}>
+                      <p style={style.errorText}>Error: Please enter a valid email address!</p>
+                    </div>
+                  </div>
+                }
                 {
                   this.state.isEmailEmpty &&
                   <div>
@@ -160,11 +165,7 @@ class Login extends Component {
             </FormControl>
           </div>
         </div>
-        <footer style={style.footer}>
-          <h6 style={style.footerText}>Powered By</h6>
-          <h4 style={style.footerTopic}>GAPSTARS</h4>
-          <h5>{this.props.articles}</h5>
-        </footer>
+        <Footer />
       </div>
     )
   }
