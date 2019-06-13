@@ -16,13 +16,24 @@ export const registerUser = async (props) => {
   return res;
 };
 
-export const registerCompanyDetails = (props) => {
-  return axios.post('/news-api/v1/register-details', {
-    email: props.email,
-    organization: props.organization,
-    designation: props.designation,
-    employeeCount: props.employeeCount
-  });
+export const registerCompanyDetails = async (props) => {
+  const accessToken = store.getState().auth.accessToken;
+  const payload = await axios.post(
+    '/news-api/v1/register-details', 
+    {
+      organization: props.organization,
+      designation: props.designation,
+      employeeCount: parseInt(props.empAcc)
+    },
+    {
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'bearer '+accessToken,
+      }
+    }
+  );
+
+  console.log(payload);
 };
 
 export const loginUser = async (props) => {
@@ -31,7 +42,9 @@ export const loginUser = async (props) => {
     email: props.email,
     password: props.password
   });
-  const payload = response.data.data;  
-  store.dispatch(getUser({ type: LOGIN_USER, payload }));
+  const payload = response.data.data; 
+  console.log(payload);
+   
+  store.dispatch(getUser({ type: LOGIN_USER, payload}));
   return payload.accessToken;
 };

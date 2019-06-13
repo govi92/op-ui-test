@@ -15,5 +15,7 @@ export function addArticle(payload) {
 }
 
 export function getUser(payload) {
+  console.log(payload);
+  
   return { type: LOGIN_USER, payload }
 }

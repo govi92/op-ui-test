@@ -1,94 +1,82 @@
 import React, { Component } from 'react';
-import { FormControl, InputLabel, Select, OutlinedInput, Button } from '@material-ui/core';
+import {Redirect} from 'react-router-dom';
+import { FormControl, TextField, Button } from '@material-ui/core';
+import * as utils from '../../utils/index';
+import Footer from '../Footer';
 import style from './style';
 
 class Selections extends Component {
   state = {
+    empAcc: '',
+    organization: '',
+    designation: '',
     firstName: 'JOHN',
     lastName: 'DOE',
-    options: [
-      {
-        age: '',
-        version: 'Option 1',
-        companies: [
-          { value: 10, name: 'company 1' },
-          { value: 30, name: 'company 2' },
-          { value: 30, name: 'company 3' },
-        ]
-      },
-      {
-        age: '',
-        version: 'Option 2',
-        companies: [
-          { value: 10, name: 'company 1' },
-          { value: 30, name: 'company 2' },
-          { value: 30, name: 'company 3' },
-        ]
-      },
-      {
-        age: '',
-        version: 'Option 3',
-        companies: [
-          { value: 10, name: 'company 1' },
-          { value: 30, name: 'company 2' },
-          { value: 30, name: 'company 3' },
-        ]
-      },
-      {
-        age: '',
-        version: 'Option 4',
-        companies: [
-          { value: 10, name: 'company 1' },
-          { value: 30, name: 'company 2' },
-          { value: 30, name: 'company 3' },
-        ]
-      }
-    ]
-  }
-  componentDidMount() {
-
+    isFormSubmitted: false
   }
 
-  handleChange = name => event => {
+  componentDidMount() { 
+    const URL = window.location.href
+    console.log(URL);
+  }
+
+  handleEventChange = name => event => {
     this.setState({
       [name]: event.target.value,
     });
   };
 
+  onSubmit = (event) => {
+    event.preventDefault();
+    const {empAcc, organization, designation} = this.state;
+    if( empAcc !== '' &&  organization!== '' && designation!== '') {
+      utils.registerCompanyDetails({empAcc, organization, designation});
+      this.setState({
+        isFormSubmitted: true
+      })
+    }
+  }
+
   SelectOptions = () => {
-    const inputLabel = null
+    if (this.state.isFormSubmitted) {
+      return <Redirect to='/login' />
+    }
     return (
       <div style={style.optionStyle}>
-        {
-          this.state.options.map(
-            option => (
-              <div>
-                <FormControl variant="outlined" style={style.formControl}>
-                  <InputLabel ref={inputLabel} htmlFor="outlined-age-native-simple">
-                    {option.version}
-                  </InputLabel>
-                  <Select
-                    native
-                    value={option.age}
-                    onChange={this.handleChange(`${option.version}`)}
-                    input={
-                      <OutlinedInput name={`${option.version}`} labelWidth={60} id="outlined-age-native-simple" />
-                    }
-                  >
-                    <option value="" />
-                    {
-                      option.companies.map(
-                        company => {
-                          return <option value={company.value}>{company.name}</option>
-                        }
-                      )
-                    }
-                  </Select>
-                </FormControl>
-              </div>
-            )
-          )
-        }
+        <div>
+          <FormControl variant="outlined" style={style.formControl}>
+            <TextField
+              id="outlined-name"
+              label="Organization/Industry"
+              // className={}
+              value={null}
+              fullWidth
+              onChange={this.handleEventChange('organization')}
+              margin="normal"
+              variant="outlined"
+            />
+            <TextField
+              id="outlined-name"
+              label="Employee Account"
+              // className={}
+              value={null}
+              fullWidth
+              onChange={this.handleEventChange('empAcc')}
+              margin="normal"
+              variant="outlined"
+            />
+            <TextField
+              id="outlined-name"
+              label="Designation"
+              // className={}
+              value={null}
+              fullWidth
+              onChange={this.handleEventChange('designation')}
+              margin="normal"
+              variant="outlined"
+            />
+          </FormControl>
+        </div>
       </div>
     );
   }
@@ -106,14 +94,16 @@ class Selections extends Component {
               }
             </div>
             <div>
-              <Button variant='contained' style={style.submitButton}>Submit</Button>
+              <Button 
+                variant='contained' 
+                style={style.submitButton}
+                onClick={this.onSubmit}
+                >Submit
+              </Button>
             </div>
           </FormControl>
         </div>
-        <footer style={style.footer}>
-          <h6 style={style.footerText}>Powered By </h6>
-          <h4><b>GAPSTARS</b></h4>
-        </footer>
+        <Footer />
       </div>
     )
   }

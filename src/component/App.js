@@ -4,7 +4,8 @@ import Login from './Login';
 import SignUp from './SignUp';
 import Confirm from './ConfirmPage';
 import Selections from './Selections';
-
+import NewsFeed from './NewsFeed';
+ 
 
 function App() {
   return (
@@ -14,6 +15,7 @@ function App() {
         <Route exact path="/login" component={Login} />
         <Route path="/signup/confirm" component={Confirm} />
         <Route path="/selections" component={Selections} />
+        <Route path="/newsfeed" component={NewsFeed} />
       </div>
     </BrowserRouter>
   );

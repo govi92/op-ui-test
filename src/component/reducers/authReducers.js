@@ -3,19 +3,21 @@ import { LOGIN_USER } from '../actions/types';
 const initialState = {
   accessToken: '',
   expiresIn: '',
-  user: []
 }
 
 export default function (state = initialState, action) {
-  console.log(action.payload);
+  let sumReduce;
+
+  if (typeof action.payload === 'object') {
+    sumReduce = action.payload.payload;
+  }
 
   switch (action.type) {
     case LOGIN_USER:
       return {
         ...state,
-        accessToken: action.payload.accessToken,
-        expiresIn: action.payload.expiresIn,
-        user: [state.user.push(action.payload)]
+        accessToken: sumReduce.accessToken,
+        expiresIn: sumReduce.expiresIn,
       }
     default:
       return state;

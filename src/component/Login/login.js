@@ -68,7 +68,7 @@ class Login extends Component {
 
   render() {
     if (this.state.isClicked) {
-      return <Redirect to='/selections' />
+      return <Redirect to='/newsfeed' />
     }
 
     return (
