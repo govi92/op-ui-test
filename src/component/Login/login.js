@@ -9,6 +9,7 @@ import {loginUser} from '../../utils/index';
 import * as utils from '../../utils/utilityFunctions';
 import style from './style';
 import Footer from '../Footer';
+import store from '../store';
 
 class Login extends Component {
   state = {
@@ -20,7 +21,8 @@ class Login extends Component {
     isloggedIn: false,
     isEmailEmpty:false,
     isPasswordEmpty: false,
-    isEmailValid: true
+    isEmailValid: true,
+    isExceptionOccurred: false
   }
 
   login = async (event) => {
@@ -32,18 +34,19 @@ class Login extends Component {
     });
 
     if(email !== '' && password !== '' && this.state.isEmailValid) {
-      loginUser({type, email, password})
-      .then(
-        response => {
-          if(response) (
-            this.setState({
-              isClicked: true,
-              isEmailEmpty: false,
-              isPasswordEmpty: false
-            })
-          );
-        }
-      );
+      const response = await loginUser({type, email, password})
+      
+      if(response) {
+        this.setState({
+          isEmailEmpty: false,
+          isPasswordEmpty: false
+        });
+        this.props.history.push('/newsfeed');
+      } else {
+        this.setState({
+          isExceptionOccurred: true
+        })
+      }
     } else if (email === '' && password !== '') {
       this.setState({
         isEmailEmpty: true
@@ -51,12 +54,12 @@ class Login extends Component {
     } else if (email !== '' && password === '') {
       this.setState({
         isPasswordEmpty: true
-      })
+      });
     } else {
       this.setState({
         isPasswordEmpty: true,
         isEmailEmpty: true
-      })
+      });
     }
   }
 
@@ -67,9 +70,6 @@ class Login extends Component {
   }
 
   render() {
-    if (this.state.isClicked) {
-      return <Redirect to='/newsfeed' />
-    }
 
     return (
       <div style={style.containerFluid}>
@@ -84,7 +84,7 @@ class Login extends Component {
                   id="outlined-name"
                   label="Email Address"
                   // className={}
-                  error={this.state.isEmailEmpty}
+                  error={this.state.isEmailEmpty | this.state.isExceptionOccurred}
                   value={null}
                   fullWidth
                   onChange={this.handleChange('email')}
@@ -111,7 +111,7 @@ class Login extends Component {
                   id="outlined-name"
                   label="Password"
                   // className={}
-                  error={this.state.isPasswordEmpty}
+                  error={this.state.isPasswordEmpty | this.state.isExceptionOccurred}
                   value={null}
                   fullWidth
                   onChange={this.handleChange('password')}
@@ -124,6 +124,14 @@ class Login extends Component {
                     <div style={style.errorMsg}>
                       <p style={style.errorText}>Error: Password shouldn't be empty!</p>
                     </div>
+                  </div>
+                }
+                {
+                  this.state.isExceptionOccurred && 
+                  <div>
+                    <p style={style.exceptionErrorText}>
+                      { store.getState().auth.errorMsg }
+                    </p>
                   </div>
                 }
               </div>

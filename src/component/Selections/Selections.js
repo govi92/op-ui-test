@@ -16,8 +16,9 @@ class Selections extends Component {
   }
 
   componentDidMount() { 
-    const URL = window.location.href
-    console.log(URL);
+    this.setState({
+      accessToken: this.props.match.params.params
+    });
   }
 
   handleEventChange = name => event => {
@@ -28,12 +29,9 @@ class Selections extends Component {
 
   onSubmit = (event) => {
     event.preventDefault();
-    const {empAcc, organization, designation} = this.state;
-    if( empAcc !== '' &&  organization!== '' && designation!== '') {
-      utils.registerCompanyDetails({empAcc, organization, designation});
-      this.setState({
-        isFormSubmitted: true
-      })
+    const {empAcc, organization, designation, accessToken} = this.state;
+    if( empAcc !== '' &&  organization!== '' && designation!== '' && accessToken) {
+      utils.registerCompanyDetails({empAcc, organization, designation, accessToken});
     }
   }
 

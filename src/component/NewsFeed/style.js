@@ -25,6 +25,10 @@ const style = {
     textAlign: 'center'
   },
 
+  newsFeedText: {
+    minWidth: '400px',
+  },
+
   listContainer: {
     border: '1px solid transparent',
     boxShadow: '1px 1px 2px gray',
@@ -43,6 +47,10 @@ const style = {
     marginTop: '30px',
     minWidth: '100%'
   },
+
+  avatarConatainer: {
+    marginRight: '20px'
+  }
 
 };
 

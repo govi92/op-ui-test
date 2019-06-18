@@ -15,6 +15,13 @@ const style = {
     minWidth: '100%'
   },
 
+  signWithGoogle: {
+    color: 'white',
+    backgroundColor: 'red',
+    marginTop: '30px',
+    minWidth: '100%'
+  },
+
   signUpButton: {
     color: 'white',
     backgroundColor: '#3b5998',
@@ -72,14 +79,6 @@ const style = {
     paddingBottom: '10px'
   },
 
-  inputContainer: {
-    // marginBottom: '10px'
-  },
-
-  inputStyle: {
-    // marginBottom: '10px'
-  },
-
   loginGoogle: {
     color: 'white',
     fontWeight: 'bold',
@@ -126,6 +125,10 @@ const style = {
     margin: '5px',
     textAlign: 'center',
     color: 'white',
+  },
+
+  exceptionText: {
+    color: 'red'
   }
 };
 

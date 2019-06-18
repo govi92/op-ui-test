@@ -7,8 +7,10 @@ import { faFacebookF, faGoogle } from "@fortawesome/free-brands-svg-icons"
 import { getUser } from '../actions/index';
 import { registerUser } from '../../utils/index';
 import * as utils from '../../utils/utilityFunctions';
+import * as util from '../../utils/index';
 import Footer from '../Footer';
 import style from './style';
+import store from '../store';
 
 class SignUp extends Component {
   state = {
@@ -23,6 +25,7 @@ class SignUp extends Component {
     isPasswordEmpty: false,
     isErrorOccured: false,
     isEmailValid: true,
+    isExceptionOccured: false
   }
 
   confirmState = () => {
@@ -34,30 +37,27 @@ class SignUp extends Component {
   signUp = async (event) => {
     event.preventDefault();
     const { type, email, password, confPass } = this.state;
-    console.log(utils.emailValidation(email));
-    
+
     this.setState({
       isEmailValid: utils.emailValidation(email)
     });
 
-    console.log(this.state.isEmailValid);
-    
-    
     if (confPass === password && confPass !== '' && password !== '' && email !== '' && this.state.isEmailValid) {
-      registerUser({ type, email, password })
-        .then(
-          res => {
-            res && (
-              // console.log('res', res)
-              
-              this.setState({
-                isClicked: true,
-                isEmailEmpty: false,
-                isPasswordEmpty: false
-              })
-            );
-          }
-        );
+      const res = await registerUser({ type, email, password });
+      if (res === true) {
+        this.setState({
+          isEmailEmpty: false,
+          isPasswordEmpty: false
+        });
+        this.props.history.push({
+          pathname: '/signup/confirm',
+          state: { email: this.state.email }
+        });
+      } else {
+        this.setState({
+          isExceptionOccured: true
+        })
+      }
       return;
     }
 
@@ -83,8 +83,8 @@ class SignUp extends Component {
         isEmailEmpty: false
       });
       return;
-    } 
-    
+    }
+
     if (password === '' && confPass === '') {
       this.setState({
         isErrorOccured: true
@@ -93,10 +93,15 @@ class SignUp extends Component {
     }
   }
 
+  signWithGoogle = async () => {
+    const res = await util.registerUser({type: 'gl', email: '', password: ''});
+    window.location.href = res;
+    console.log(res);
+    
+  }
+
   switchToLogin = () => {
-    this.setState({
-      isLogginClicked: true
-    });
+    this.props.history.push('/login')
   }
 
   handleEventChange = name => event => {
@@ -105,19 +110,37 @@ class SignUp extends Component {
     })
   }
 
+  buttonContainer = () => {
+    return (
+      <div>
+        <Button variant style={style.signWithGoogle} onClick={this.signWithGoogle}>Sign With Google</Button>
+        <div className='row'>
+          <div className='col-md-6'>
+            <Button
+              variant="contained"
+              style={style.signUpButton}
+              onClick={this.signUp}
+            >
+              Create Account
+          </Button>
+          </div>
+          <div className='col-md-6'>
+            <Button
+              variant="contained"
+              style={style.loginButton}
+              to='/login'
+              onClick={this.switchToLogin}
+            >
+              Login
+          </Button>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
 
   render() {
-    if (this.state.isClicked) {
-      return <Redirect to={{
-        pathname: '/signup/confirm',
-        state: { email: this.state.email }
-      }} />
-    }
-
-    if (this.state.isLogginClicked) {
-      return <Redirect to='/login' />
-    }
-
     return (
       <div style={style.containerFluid}>
         <div className={style.formWrapper}>
@@ -133,14 +156,14 @@ class SignUp extends Component {
                   label="Email Address"
                   // className={}
                   value={null}
-                  error={this.state.isEmailEmpty}
+                  error={this.state.isEmailEmpty | this.state.isExceptionOccured}
                   fullWidth
                   onChange={this.handleEventChange('email')}
                   margin="normal"
                   variant="outlined"
                 />
                 {
-                  (!this.state.isEmailEmpty && !this.state.isEmailValid) && 
+                  (!this.state.isEmailEmpty && !this.state.isEmailValid) &&
                   <div>
                     <div style={style.errorMsg}>
                       <p style={style.errorText}>Error: Please enter a valid email address!</p>
@@ -160,7 +183,7 @@ class SignUp extends Component {
                   label="Password"
                   // className={}
                   type="password"
-                  error={this.state.isPasswordEmpty | this.state.isErrorOccured}
+                  error={this.state.isPasswordEmpty | this.state.isErrorOccured | this.state.isExceptionOccured}
                   value={null}
                   fullWidth
                   onChange={this.handleEventChange('password')}
@@ -180,7 +203,7 @@ class SignUp extends Component {
                   label="Confirm Password"
                   // className={}
                   type="password"
-                  error={this.state.isErrorOccured}
+                  error={this.state.isErrorOccured | this.state.isExceptionOccured}
                   value={null}
                   fullWidth
                   onChange={this.handleEventChange('confPass')}
@@ -195,53 +218,18 @@ class SignUp extends Component {
                     </div>
                   </div>
                 }
+                {
+                  this.state.isExceptionOccured &&
+                  <div>
+                    <p style={style.exceptionText}>{store.getState().auth.errorMsg}</p>
+                  </div>
+                }
               </div>
               <div style={style.hrContainer}>
                 <hr style={style.styleEight} />
               </div>
               <div>
-                {/* <div className={'row'}>
-                  <div className='col-md-6'>
-                    <Button variant='contained' style={style.loginGoogle}>
-                      <div style={style.iconStyle}>
-                        <FontAwesomeIcon icon={faGoogle} />
-                      </div>
-                      { this.state.isloggedIn ? 'Login' : 'SignUp' } with Google
-                    </Button>
-                  </div>
-                  <div className='col-md-6'>
-                    <Button 
-                      variant='contained'
-                      style={style.loginFacebook}
-                      onClick={this.login}>
-                      <div style={style.iconStyle}>
-                        <FontAwesomeIcon icon={faFacebookF} />
-                      </div>
-                      { this.state.isloggedIn ? 'Login' : 'SignUp' } with Facebook
-                    </Button>
-                  </div>
-                </div> */}
-              </div>
-              <div className='row'>
-                <div className='col-md-6'>
-                  <Button
-                    variant="contained"
-                    style={style.signUpButton}
-                    onClick={this.signUp}
-                  >
-                    Create Account
-                  </Button>
-                </div>
-                <div className='col-md-6'>
-                  <Button
-                    variant="contained"
-                    style={style.loginButton}
-                    to='/login'
-                    onClick={this.switchToLogin}
-                  >
-                    Login
-                  </Button>
-                </div>
+                {this.buttonContainer()}
               </div>
             </FormControl>
           </div>

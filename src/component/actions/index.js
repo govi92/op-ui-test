@@ -1,4 +1,4 @@
-import { FETCH_USER, ADD_ARTICLE, LOGIN_USER } from './types';
+import { FETCH_USER, ADD_ARTICLE, LOGIN_USER, FETCH_ERROR} from './types';
 
 // export const fetchUser = () => async dispatch => {
 //   const rest = await axios.get('/')
@@ -15,7 +15,9 @@ export function addArticle(payload) {
 }
 
 export function getUser(payload) {
-  console.log(payload);
-  
   return { type: LOGIN_USER, payload }
+}
+
+export function fetchError(payload) {
+  return { type: FETCH_ERROR, payload }
 }

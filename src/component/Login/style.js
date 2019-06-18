@@ -137,6 +137,10 @@ const style = {
     margin: '5px',
     textAlign: 'center',
     color: 'white',
+  },
+
+  exceptionErrorText: {
+    color: 'red'
   }
 };
 

@@ -1,8 +1,10 @@
-import { LOGIN_USER } from '../actions/types';
+import { LOGIN_USER, FETCH_ERROR } from '../actions/types';
 
 const initialState = {
   accessToken: '',
   expiresIn: '',
+  errorMsg: '',
+  errorStatus: ''
 }
 
 export default function (state = initialState, action) {
@@ -18,6 +20,12 @@ export default function (state = initialState, action) {
         ...state,
         accessToken: sumReduce.accessToken,
         expiresIn: sumReduce.expiresIn,
+      }
+    case FETCH_ERROR:
+      return {
+        ...state,
+        errorMsg: sumReduce.data.message,
+        errorStatus: sumReduce.status
       }
     default:
       return state;
