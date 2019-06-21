@@ -1,18 +1,37 @@
 import React, {Component} from 'react';
 import * as utils from '../../utils/index';
-import qs from 'querystring';
 
 class Callback extends Component {
+  state = {
+    isOauthSuccessed: false,
+    accessToken: ''
+  }
+
   async componentDidMount() {
-    console.log(this.props.location.search);
-    await utils.callBackURL(this.props.location.search);
+    if(this.props.location.search === '') {
+      this.setState({
+        isOauthSuccessed: false
+      });
+    } else {
+      const response = await utils.callBackURL(this.props.location.search);
+      
+      this.setState({
+        isOauthSuccessed: true,
+        accessToken: response.data.data.accessToken
+      });
+      this.props.history.push(`/selections/${this.state.accessToken}`);
+    }
   }
 
   render() {
     return (
       <div>
-        <h1>Call Back Page</h1>
-        <p>{this.props.match.params.parms}</p>
+        <h1>CallBack Page</h1>
+        {
+          this.state.isOauthSuccessed ?
+          <p>Google sign up is successed</p> :
+          <p>Google sign up was failed, please contact the admin</p>
+        }
       </div>
     )
   }

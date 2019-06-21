@@ -63,6 +63,11 @@ class Login extends Component {
     }
   }
 
+  loginWithGoogle = async () => {
+    const response = await loginUser({type: 'gl', email: '', password: ''});
+    window.location.href = response;
+  }
+
   handleChange = name => event => {
     this.setState({
       [name]: event.target.value
@@ -141,22 +146,25 @@ class Login extends Component {
               <div>
                 <div className={'row'}>
                   <div className='col-md-6 col-xs-6'>
-                    <Button variant='contained' style={style.loginGoogle}>
+                    <Button 
+                      variant='contained' 
+                      style={style.loginGoogle}
+                      onClick={this.loginWithGoogle}>
                       <div style={style.iconStyle}>
                         <FontAwesomeIcon icon={faGoogle} />
                       </div>
-                      { this.state.isloggedIn ? 'Login' : 'SignUp' } with Google
+                      Login with Google
                     </Button>
                   </div>
                   <div className='col-md-6 col-xs-6'>
                     <Button 
                       variant='contained'
                       style={style.loginFacebook}
-                      onClick={this.login}>
+                      onClick={() => {}}>
                       <div style={style.iconStyle}>
                         <FontAwesomeIcon icon={faFacebookF} />
                       </div>
-                      { this.state.isloggedIn ? 'Login' : 'SignUp' } with Facebook
+                      Login with Facebook
                     </Button>
                   </div>
                 </div>

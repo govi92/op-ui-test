@@ -8,6 +8,7 @@ import style from './style';
 class Selections extends Component {
   state = {
     empAcc: '',
+    accessToken: '',
     organization: '',
     designation: '',
     firstName: 'JOHN',
@@ -15,10 +16,12 @@ class Selections extends Component {
     isFormSubmitted: false
   }
 
-  componentDidMount() { 
+  async componentDidMount() { 
     this.setState({
       accessToken: this.props.match.params.params
     });
+    const res = await utils.confirmRegistration(this.props.match.params.params);
+    console.log(res);
   }
 
   handleEventChange = name => event => {
@@ -33,12 +36,10 @@ class Selections extends Component {
     if( empAcc !== '' &&  organization!== '' && designation!== '' && accessToken) {
       utils.registerCompanyDetails({empAcc, organization, designation, accessToken});
     }
+    this.props.history.push('/login');
   }
 
   SelectOptions = () => {
-    if (this.state.isFormSubmitted) {
-      return <Redirect to='/login' />
-    }
     return (
       <div style={style.optionStyle}>
         <div>

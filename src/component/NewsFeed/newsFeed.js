@@ -2,22 +2,20 @@ import React, {Component} from 'react';
 import {List, ListItem, ListItemText, Avatar} from '@material-ui/core';
 import Footer from '../Footer';
 import style from './style';
+import * as utils from '../../utils/index';
+import { async } from 'q';
 
 class NewsFeed extends Component {
   state = {
-    news: [
-      {
-        header: 'Sri Lanka storms into finals CWC19',
-        content: 'Greates victory ever on semis against Australiya',
-        image: 'http://www.srilankacricket.lk/wp-content/uploads/2017/06/JDK_6308.jpg'
-      },
-      {
-        header: 'Sri Lanks ready to take on India in Final at Lords',
-        content: 'It\' the time for revenge - Fans in SL',
-        image: 'https://images.financialexpress.com/2017/12/cricket-1.jpg?w=660&h=440&imflag=true'
-      }
-    ]
-  }
+    news: []
+  };
+
+  async componentDidMount() {
+    const news = await utils.newsGallery();
+    this.setState({
+      news: news.data.data
+    })
+  };
 
   render() {
     return(
@@ -30,9 +28,12 @@ class NewsFeed extends Component {
                 <List style={style.listStyle}>
                 <ListItem>
                   <div style={style.avatarConatainer}>
-                    <img alt='' src={news.image} height="130" width="130" />
+                    <img alt='' src={news.imageUrl} height="130" width="130" />
                   </div>
-                  <ListItemText primary={news.header} secondary={news.content} style={style.newsFeedText} />
+                  <div>
+                    <h3>{news.headline}</h3>
+                    <ListItemText secondary={news.description} style={style.newsFeedText} />
+                  </div>
                 </ListItem>
               </List>
               </div>
@@ -42,7 +43,7 @@ class NewsFeed extends Component {
         <Footer />
       </div>
     )
-  }
+  };
 }
 
 export default NewsFeed;

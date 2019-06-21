@@ -5,6 +5,7 @@ import SignUp from './SignUp';
 import Confirm from './ConfirmPage';
 import Selections from './Selections';
 import Callback from './Callback';
+import CallBackLogin from './CallBackLogin';
 import NewsFeed from './NewsFeed';
  
 
@@ -16,7 +17,8 @@ function App() {
         <Route exact path="/login" component={Login} />
         <Route path="/signup/confirm" component={Confirm} />
         <Route path="/selections/:params" component={Selections} />
-        <Route path="/callback/:medium" component={Callback} />
+        <Route exact path="/callback/:medium" component={Callback} />
+        <Route path="/callback/login/:medium" component={CallBackLogin} />
         <Route path="/newsfeed" component={NewsFeed} />
       </div>
     </BrowserRouter>

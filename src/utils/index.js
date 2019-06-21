@@ -17,7 +17,7 @@ export const registerUser = async (props) => {
     let res;
     if(props.type === 'op') {
       res = payload.data.success;
-      store.dispatch(addUser({ type: FETCH_USER, payload: payload.data }));
+      // store.dispatch(addUser({ type: FETCH_USER, payload: payload.data }));
     } else {
       res = payload.data.message
     }
@@ -50,8 +50,6 @@ export const registerCompanyDetails = async (props) => {
       store.dispatch(fetchError({type: FETCH_ERROR, payload:error.response}));
       return false
     });
-    console.log(response);
-    
     return response;
     
   } catch (error) {
@@ -71,13 +69,22 @@ export const loginUser = async (props) => {
         store.dispatch(fetchError({ type: FETCH_ERROR, payload: error.response }))
         return false;
       });
-
-    if (response !== false) {
-      const payload = response.data.data;
-      store.dispatch(getUser({ type: LOGIN_USER, payload }));
-      return payload.accessToken;
+      
+    if(props.type === 'op') {
+      if (response !== false) {
+        const payload = response.data.data;
+        store.dispatch(getUser({ type: LOGIN_USER, payload }));
+        return payload.accessToken;
+      } else {
+        return false;
+      }
     } else {
-      return false;
+      if (response.data.success !== false) {
+        const payload = response.data;
+        return payload.message;
+      } else {
+        return false;
+      }
     }
 
   } catch (e) {
@@ -85,8 +92,44 @@ export const loginUser = async (props) => {
   }
 };
 
+export const newsGallery = async() => {
+  
+  return await axios.get(
+    'http://localhost:9090/news-api/v1/news/',
+    {
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `bearer ${store.getState().auth.accessToken}`
+      }
+    }
+  );
+};
+
+
+export const confirmRegistration = async(props) => {
+  try {
+    const response = await axios.get(`http://localhost:9090/news-api/v1/register-confirmation/${props}`)
+    .catch(function(e) {
+      console.log(e);
+    });
+    return response;
+  } catch(error) {
+    console.log(error);
+  }
+};
+
 export const callBackURL = async (params) => {
-  const res = await axios.get(`http://localhost:9090/news-api/v1/callback-google${params}`);
-  console.log(res);
-  // return res
-}
+  try {
+    return await axios.get(`http://localhost:9090/news-api/v1/callback-google${params}`);
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const loginCallBackURL = async (params) => {
+  try {
+    return await axios.get(`http://localhost:9090/news-api/v1/callback-google-login${params}`);
+  } catch (error) {
+    console.log(error);
+  }
+};

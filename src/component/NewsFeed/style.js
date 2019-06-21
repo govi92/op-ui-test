@@ -18,7 +18,8 @@ const style = {
     backgroundColor: 'white',
     border: '1px solid transparent',
     boxShadow: '1px 1px 5px black',
-    borderRadius: '1%'
+    borderRadius: '1%',
+    overflow: 'scroll'
   },
 
   newsFeedHeader: {
@@ -26,7 +27,12 @@ const style = {
   },
 
   newsFeedText: {
-    minWidth: '400px',
+    overflow: 'hidden',
+    display: '-webkit-box',
+    '-webkit-box-flex': '-1',
+    '-webkit-line-clamp': '4',
+    '-webkit-box-orient': 'vertical',
+    maxWidth: '800px',
   },
 
   listContainer: {
@@ -37,7 +43,6 @@ const style = {
 
   listStyle: {
     width: '100%',
-    maxWidth: 360,
     backgroundColor: 'lightergray',
   },
 

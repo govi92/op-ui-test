@@ -1,11 +1,5 @@
 import { FETCH_USER, ADD_ARTICLE, LOGIN_USER, FETCH_ERROR} from './types';
 
-// export const fetchUser = () => async dispatch => {
-//   const rest = await axios.get('/')
-
-//   return dispatch(FETCH_USERS, {rest})
-// }
-
 export function addUser(payload) {
   return { type: FETCH_USER, payload }
 }

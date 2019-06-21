@@ -18,7 +18,7 @@ const style = {
   signWithGoogle: {
     color: 'white',
     backgroundColor: 'red',
-    marginTop: '30px',
+    marginTop: '10px',
     minWidth: '100%'
   },
 
@@ -49,7 +49,7 @@ const style = {
     marginTop: '100px',
     marginLeft: '35%',
     padding: '30px',
-    height: '550px',
+    height: '560px',
     width: '26%',
     background: 'white',
     border: 'solid 1px black',
@@ -93,7 +93,7 @@ const style = {
   },
 
   hrContainer: {
-    paddingTop: '20px'
+    // paddingTop: '20px'
   },
 
   styleEight: {

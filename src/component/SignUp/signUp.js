@@ -113,7 +113,12 @@ class SignUp extends Component {
   buttonContainer = () => {
     return (
       <div>
-        <Button variant style={style.signWithGoogle} onClick={this.signWithGoogle}>Sign With Google</Button>
+        <Button 
+          variant style={style.signWithGoogle}
+          onClick={this.signWithGoogle}
+        >
+          Sign With Google
+        </Button>
         <div className='row'>
           <div className='col-md-6'>
             <Button
