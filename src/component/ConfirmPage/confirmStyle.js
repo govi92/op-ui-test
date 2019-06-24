@@ -1,4 +1,3 @@
-import images from '../../assets/image';
 
 const style = {
   label: {

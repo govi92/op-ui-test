@@ -12,11 +12,20 @@ class CallBackLogin extends Component {
         isOauthSuccessed: false
       });
     } else {
-      await utils.loginCallBackURL(this.props.location.search);
-      this.setState({
-        isOauthSuccessed: true,
-      });
-      this.props.history.push('/newsfeed');
+      console.log(this.props.match.params);
+      if(this.props.match.params.medium === 'facebook' || this.props.match.params.medium === 'google') {
+        const res = await utils.loginCallBackURL(this.props.match.params.medium, this.props.location.search);
+      if(res.status === 200) {
+        this.setState({
+          isOauthSuccessed: true,
+        });
+        this.props.history.push('/newsfeed');
+      } else if(res.status === 404) {
+        this.setState({
+          isOauthSuccessed: false,
+        });
+      }
+      }
     }
   }
 

@@ -19,7 +19,7 @@ export const registerUser = async (props) => {
       res = payload.data.success;
       // store.dispatch(addUser({ type: FETCH_USER, payload: payload.data }));
     } else {
-      res = payload.data.message
+      res = payload.data.message;
     }
     return res;
 
@@ -118,7 +118,7 @@ export const confirmRegistration = async(props) => {
   }
 };
 
-export const callBackURL = async (params) => {
+export const googleCallBackURL = async (params) => {
   try {
     return await axios.get(`http://localhost:9090/news-api/v1/callback-google${params}`);
   } catch (error) {
@@ -126,10 +126,32 @@ export const callBackURL = async (params) => {
   }
 };
 
-export const loginCallBackURL = async (params) => {
+export const googleLoginCallBackURL = async (params) => {
   try {
-    return await axios.get(`http://localhost:9090/news-api/v1/callback-google-login${params}`);
+    const res = await axios.get(`http://localhost:9090/news-api/v1/callback-google-login${params}`);
+    console.log(res);
+    return res;
   } catch (error) {
     console.log(error);
+    return {statu: 404}
+  }
+};
+
+export const callBackURL = async (medium, params) => {
+  try {
+    return await axios.get(`http://localhost:9090/news-api/v1/callback-${medium}${params}`);
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const loginCallBackURL = async (medium, params) => {
+  try {
+    const res = await axios.get(`http://localhost:9090/news-api/v1/callback-${medium}-login${params}`);
+    console.log(res);
+    return res;
+  } catch (error) {
+    console.log(error);
+    return {statu: 404}
   }
 };

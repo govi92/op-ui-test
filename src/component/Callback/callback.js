@@ -13,13 +13,14 @@ class Callback extends Component {
         isOauthSuccessed: false
       });
     } else {
-      const response = await utils.callBackURL(this.props.location.search);
-      
-      this.setState({
-        isOauthSuccessed: true,
-        accessToken: response.data.data.accessToken
-      });
-      this.props.history.push(`/selections/${this.state.accessToken}`);
+      if(this.props.match.params.medium === 'facebook' || this.props.match.params.medium === 'google') {
+        const response = await utils.callBackURL(this.props.match.params.medium, this.props.location.search);
+        this.setState({
+          isOauthSuccessed: true,
+          accessToken: response.data.data.accessToken
+        });
+        this.props.history.push(`/selections/${this.state.accessToken}`);
+      }
     }
   }
 

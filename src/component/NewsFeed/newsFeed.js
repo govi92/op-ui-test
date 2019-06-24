@@ -7,14 +7,25 @@ import { async } from 'q';
 
 class NewsFeed extends Component {
   state = {
-    news: []
+    news: [
+      {
+        imageUrl: 'http://www.frontpage.lk/img/news/ce698684.jpg',
+        headline: 'Sri Lanka Storms in finals in CWC 2019',
+        description: 'Sri Lanka defeated the Australia in semi-final at ovel and create history, famous victory for SL in famous old cricket ground'
+      },
+      {
+        imageUrl: 'https://images.financialexpress.com/2017/06/sl.jpg?w=660&h=440&imflag=true',
+        headline: 'Sri Lanka will meet India in finals of CWC 2019',
+        description: 'One of the most famous rivals in cricket will meet again in CWC 2019, SL is ready take on India said by captain Dimuth Karunaratne.'
+      }
+    ]
   };
 
   async componentDidMount() {
-    const news = await utils.newsGallery();
-    this.setState({
-      news: news.data.data
-    })
+    // const news = await utils.newsGallery();
+    // this.setState({
+    //   news: news.data.data
+    // })
   };
 
   render() {

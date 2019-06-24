@@ -68,9 +68,14 @@ class Login extends Component {
     window.location.href = response;
   }
 
+  loginWithFacebook = async () => {
+    const response = await loginUser({type: 'fb', email: '', password: ''});
+    window.location.href = response;
+  }
+
   handleChange = name => event => {
     this.setState({
-      [name]: event.target.value
+      [name]: event.target.value 
     })
   }
 
@@ -160,7 +165,7 @@ class Login extends Component {
                     <Button 
                       variant='contained'
                       style={style.loginFacebook}
-                      onClick={() => {}}>
+                      onClick={this.loginWithFacebook}>
                       <div style={style.iconStyle}>
                         <FontAwesomeIcon icon={faFacebookF} />
                       </div>

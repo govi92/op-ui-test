@@ -93,11 +93,14 @@ class SignUp extends Component {
     }
   }
 
-  signWithGoogle = async () => {
-    const res = await util.registerUser({type: 'gl', email: '', password: ''});
+  signUpWithGoogle = async () => {
+    const res = await util.registerUser({ type: 'gl', email: '', password: '' });
     window.location.href = res;
-    console.log(res);
-    
+  }
+
+  signUpWithFacebook = async () => {
+    const res = await util.registerUser({ type: 'fb', email: '', password: '' });
+    window.location.href = res;
   }
 
   switchToLogin = () => {
@@ -113,12 +116,24 @@ class SignUp extends Component {
   buttonContainer = () => {
     return (
       <div>
-        <Button 
-          variant style={style.signWithGoogle}
-          onClick={this.signWithGoogle}
-        >
-          Sign With Google
+        <div className='row'>
+          <div className='col-md-6'>
+            <Button
+              variant style={style.signWithGoogle}
+              onClick={this.signUpWithGoogle}
+            >
+              Sign With Google
+          </Button>
+          </div>
+          <div className='col-md-6'>
+            <Button
+              variant style={style.signWithGoogle}
+              onClick={this.signUpWithFacebook}
+            >
+              Sign With Facebook
         </Button>
+          </div>
+        </div>
         <div className='row'>
           <div className='col-md-6'>
             <Button
