@@ -29,9 +29,9 @@ const style = {
   newsFeedText: {
     overflow: 'hidden',
     display: '-webkit-box',
-    '-webkit-box-flex': '-1',
-    '-webkit-line-clamp': '4',
-    '-webkit-box-orient': 'vertical',
+    WebkitBoxFlex: '-1',
+    WebkitLineClamp: '4',
+    WebkitBoxOrient: 'vertical',
     maxWidth: '800px',
   },
 

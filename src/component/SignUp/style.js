@@ -22,6 +22,13 @@ const style = {
     minWidth: '100%'
   },
 
+  signUpWithFacebook: {
+    color: 'white',
+    backgroundColor: '#3b5998',
+    marginTop: '10px',
+    minWidth: '100%'
+  },
+
   signUpButton: {
     color: 'white',
     backgroundColor: '#3b5998',
@@ -61,8 +68,8 @@ const style = {
     position: 'absolute',
     marginTop: '100px',
     marginLeft: '35%',
-    padding: '30px',
-    height: '610px',
+    padding: '40px',
+    height: '650px',
     width: '26%',
     background: 'white',
     border: 'solid 1px black',
@@ -76,7 +83,7 @@ const style = {
 
   subTopic: {
     textAlign: 'center',
-    paddingBottom: '10px'
+    // paddingBottom: '10px'
   },
 
   loginGoogle: {

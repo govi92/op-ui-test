@@ -1,17 +1,17 @@
 import React, { Component } from 'react';
-import { Redirect } from 'react-router-dom'
-import {connect} from 'react-redux';
+import { connect } from 'react-redux';
 import { Button, TextField, FormControl } from '@material-ui/core'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faFacebookF, faGoogle } from "@fortawesome/free-brands-svg-icons"
-import {getUser} from '../actions/index';
-import {loginUser} from '../../utils/index';
+import { getUser } from '../actions/index';
+import { loginUser } from '../../utils/index';
 import * as utils from '../../utils/utilityFunctions';
 import style from './style';
 import Footer from '../Footer';
 import store from '../store';
 
 class Login extends Component {
+
   state = {
     email: '',
     password: '',
@@ -19,7 +19,7 @@ class Login extends Component {
     isClicked: false,
     isFacebookClicked: false,
     isloggedIn: false,
-    isEmailEmpty:false,
+    isEmailEmpty: false,
     isPasswordEmpty: false,
     isEmailValid: true,
     isExceptionOccurred: false
@@ -27,21 +27,22 @@ class Login extends Component {
 
   login = async (event) => {
     event.preventDefault();
-    const {type, email, password } = this.state;
+    const { type, email, password } = this.state;
 
     this.setState({
       isEmailValid: utils.emailValidation(email)
     });
 
-    if(email !== '' && password !== '' && this.state.isEmailValid) {
-      const response = await loginUser({type, email, password})
-      
-      if(response) {
+    if (email !== '' && password !== '' && this.state.isEmailValid) {
+      const response = await loginUser({ type, email, password })
+
+      if (response) {
         this.setState({
           isEmailEmpty: false,
           isPasswordEmpty: false
         });
         this.props.history.push('/newsfeed');
+        localStorage.setItem('loginCredentials', response );
       } else {
         this.setState({
           isExceptionOccurred: true
@@ -61,30 +62,32 @@ class Login extends Component {
         isEmailEmpty: true
       });
     }
-  }
+  };
 
   loginWithGoogle = async () => {
-    const response = await loginUser({type: 'gl', email: '', password: ''});
-    window.location.href = response;
-  }
+    const response = await loginUser({ type: 'gl', email: '', password: '' });
+    console.log(response);
+    
+    // window.location.href = response;
+  };
 
   loginWithFacebook = async () => {
-    const response = await loginUser({type: 'fb', email: '', password: ''});
+    const response = await loginUser({ type: 'fb', email: '', password: '' });
     window.location.href = response;
-  }
+  };
 
   handleChange = name => event => {
     this.setState({
-      [name]: event.target.value 
+      [name]: event.target.value
     })
-  }
+  };
 
   render() {
 
     return (
       <div style={style.containerFluid}>
         <div >
-          <div style={(this.state.isEmailEmpty | this.state.isPasswordEmpty) ? style.formContainerExtended : style.formContainer }>
+          <div style={(this.state.isEmailEmpty | this.state.isPasswordEmpty) ? style.formContainerExtended : style.formContainer}>
             <FormControl>
               <div>
                 <h2 style={style.topic}>LOGIN</h2>
@@ -94,8 +97,7 @@ class Login extends Component {
                   id="outlined-name"
                   label="Email Address"
                   // className={}
-                  error={this.state.isEmailEmpty | this.state.isExceptionOccurred}
-                  value={null}
+                  error={(this.state.isEmailEmpty | this.state.isExceptionOccurred) ? true : false}
                   fullWidth
                   onChange={this.handleChange('email')}
                   margin="normal"
@@ -121,8 +123,7 @@ class Login extends Component {
                   id="outlined-name"
                   label="Password"
                   // className={}
-                  error={this.state.isPasswordEmpty | this.state.isExceptionOccurred}
-                  value={null}
+                  error={(this.state.isPasswordEmpty | this.state.isExceptionOccurred) ? true : false}
                   fullWidth
                   onChange={this.handleChange('password')}
                   margin="normal"
@@ -137,10 +138,18 @@ class Login extends Component {
                   </div>
                 }
                 {
-                  this.state.isExceptionOccurred && 
+                  this.state.isExceptionOccurred &&
                   <div>
                     <p style={style.exceptionErrorText}>
-                      { store.getState().auth.errorMsg }
+                      {store.getState().auth.errorMsg}
+                    </p>
+                  </div>
+                }
+                {
+                  this.props.location.state &&
+                  <div>
+                    <p style={style.exceptionErrorText}>
+                      {this.props.location.state}
                     </p>
                   </div>
                 }
@@ -151,8 +160,8 @@ class Login extends Component {
               <div>
                 <div className={'row'}>
                   <div className='col-md-6 col-xs-6'>
-                    <Button 
-                      variant='contained' 
+                    <Button
+                      variant='contained'
                       style={style.loginGoogle}
                       onClick={this.loginWithGoogle}>
                       <div style={style.iconStyle}>
@@ -162,7 +171,7 @@ class Login extends Component {
                     </Button>
                   </div>
                   <div className='col-md-6 col-xs-6'>
-                    <Button 
+                    <Button
                       variant='contained'
                       style={style.loginFacebook}
                       onClick={this.loginWithFacebook}>
@@ -194,7 +203,7 @@ class Login extends Component {
 
 const mapDispatchToProps = dispatch => {
   return {
-    getUser:user => dispatch(getUser(user))
+    getUser: user => dispatch(getUser(user))
   }
 }
 

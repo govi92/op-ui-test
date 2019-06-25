@@ -1,9 +1,6 @@
 import React, { Component } from 'react';
-import { Redirect } from 'react-router-dom'
 import { connect } from 'react-redux';
 import { Button, TextField, FormControl } from '@material-ui/core'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faFacebookF, faGoogle } from "@fortawesome/free-brands-svg-icons"
 import { getUser } from '../actions/index';
 import { registerUser } from '../../utils/index';
 import * as utils from '../../utils/utilityFunctions';
@@ -26,6 +23,11 @@ class SignUp extends Component {
     isErrorOccured: false,
     isEmailValid: true,
     isExceptionOccured: false
+  }
+
+  componentDidMount() {
+    console.log(this.props.location.state);
+
   }
 
   confirmState = () => {
@@ -119,25 +121,25 @@ class SignUp extends Component {
         <div className='row'>
           <div className='col-md-6'>
             <Button
-              variant style={style.signWithGoogle}
+              variant='contained' style={style.signWithGoogle}
               onClick={this.signUpWithGoogle}
             >
               Sign With Google
-          </Button>
+            </Button>
           </div>
           <div className='col-md-6'>
             <Button
-              variant style={style.signWithGoogle}
+              variant='contained' style={style.signUpWithFacebook}
               onClick={this.signUpWithFacebook}
             >
               Sign With Facebook
-        </Button>
+            </Button>
           </div>
         </div>
         <div className='row'>
           <div className='col-md-6'>
             <Button
-              variant="contained"
+              variant='contained'
               style={style.signUpButton}
               onClick={this.signUp}
             >
@@ -146,7 +148,7 @@ class SignUp extends Component {
           </div>
           <div className='col-md-6'>
             <Button
-              variant="contained"
+              variant='contained'
               style={style.loginButton}
               to='/login'
               onClick={this.switchToLogin}
@@ -164,7 +166,7 @@ class SignUp extends Component {
     return (
       <div style={style.containerFluid}>
         <div className={style.formWrapper}>
-          <div style={(this.state.isEmailEmpty | this.state.isErrorOccured) ? style.formContainerExtended : style.formContainer}>
+          <div style={(this.state.isEmailEmpty | this.state.isErrorOccured | this.props.location.state) ? style.formContainerExtended : style.formContainer}>
             <FormControl>
               <div>
                 <h3 style={style.topic}>CREATE YOUR <br /> ACCOUNT</h3>
@@ -175,8 +177,7 @@ class SignUp extends Component {
                   id="outlined-name"
                   label="Email Address"
                   // className={}
-                  value={null}
-                  error={this.state.isEmailEmpty | this.state.isExceptionOccured}
+                  error={(this.state.isEmailEmpty | this.state.isExceptionOccured) ? true : false}
                   fullWidth
                   onChange={this.handleEventChange('email')}
                   margin="normal"
@@ -203,8 +204,7 @@ class SignUp extends Component {
                   label="Password"
                   // className={}
                   type="password"
-                  error={this.state.isPasswordEmpty | this.state.isErrorOccured | this.state.isExceptionOccured}
-                  value={null}
+                  error={(this.state.isPasswordEmpty | this.state.isErrorOccured | this.state.isExceptionOccured) ? true : false}
                   fullWidth
                   onChange={this.handleEventChange('password')}
                   margin="normal"
@@ -223,8 +223,7 @@ class SignUp extends Component {
                   label="Confirm Password"
                   // className={}
                   type="password"
-                  error={this.state.isErrorOccured | this.state.isExceptionOccured}
-                  value={null}
+                  error={(this.state.isErrorOccured | this.state.isExceptionOccured) ? true : false}
                   fullWidth
                   onChange={this.handleEventChange('confPass')}
                   margin="normal"
@@ -244,10 +243,16 @@ class SignUp extends Component {
                     <p style={style.exceptionText}>{store.getState().auth.errorMsg}</p>
                   </div>
                 }
+                {
+                  this.props.location.state &&
+                  <div>
+                    <p style={style.exceptionText}>{this.props.location.state.error}</p>
+                  </div>
+                }
               </div>
-              <div style={style.hrContainer}>
+              {/* <div style={style.hrContainer}>
                 <hr style={style.styleEight} />
-              </div>
+              </div> */}
               <div>
                 {this.buttonContainer()}
               </div>

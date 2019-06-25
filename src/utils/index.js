@@ -1,7 +1,8 @@
+import React from 'react';
 import axios from 'axios';
 import store from '../component/store/index';
-import { getUser, addUser, fetchError } from '../component/actions/index';
-import { LOGIN_USER, FETCH_USER, FETCH_ERROR } from '../component/actions/types';
+import { getUser, fetchError } from '../component/actions/index';
+import { LOGIN_USER, FETCH_ERROR } from '../component/actions/types';
 
 export const registerUser = async (props) => {
   try {
@@ -9,7 +10,8 @@ export const registerUser = async (props) => {
       type: props.type,
       email: props.email,
       password: props.password
-    }).catch(function (error) {
+    })
+    .catch(function (error) {
       store.dispatch(fetchError({ type: FETCH_ERROR, payload: error.response }));
       return false;
     });
@@ -17,7 +19,6 @@ export const registerUser = async (props) => {
     let res;
     if(props.type === 'op') {
       res = payload.data.success;
-      // store.dispatch(addUser({ type: FETCH_USER, payload: payload.data }));
     } else {
       res = payload.data.message;
     }
@@ -43,10 +44,8 @@ export const registerCompanyDetails = async (props) => {
           'Authorization': `bearer ${props.accessToken}`,
         }
       }
-     
     )
     .catch(function(error) {
-      console.log(error.response);
       store.dispatch(fetchError({type: FETCH_ERROR, payload:error.response}));
       return false
     });
@@ -69,11 +68,11 @@ export const loginUser = async (props) => {
         store.dispatch(fetchError({ type: FETCH_ERROR, payload: error.response }))
         return false;
       });
-      
     if(props.type === 'op') {
       if (response !== false) {
         const payload = response.data.data;
         store.dispatch(getUser({ type: LOGIN_USER, payload }));
+        localStorage.setItem('loginStats', payload);
         return payload.accessToken;
       } else {
         return false;
@@ -120,7 +119,10 @@ export const confirmRegistration = async(props) => {
 
 export const googleCallBackURL = async (params) => {
   try {
-    return await axios.get(`http://localhost:9090/news-api/v1/callback-google${params}`);
+    return await axios.get(`http://localhost:9090/news-api/v1/callback-google${params}`)
+    .catch(function(e) {
+      return (e.status, e.data.message)
+    });
   } catch (error) {
     console.log(error);
   }
@@ -128,9 +130,10 @@ export const googleCallBackURL = async (params) => {
 
 export const googleLoginCallBackURL = async (params) => {
   try {
-    const res = await axios.get(`http://localhost:9090/news-api/v1/callback-google-login${params}`);
-    console.log(res);
-    return res;
+    return await axios.get(`http://localhost:9090/news-api/v1/callback-google-login${params}`)
+    .catch(function(e) {
+      return (e.status, e.data.message)
+    });
   } catch (error) {
     console.log(error);
     return {statu: 404}
@@ -139,7 +142,11 @@ export const googleLoginCallBackURL = async (params) => {
 
 export const callBackURL = async (medium, params) => {
   try {
-    return await axios.get(`http://localhost:9090/news-api/v1/callback-${medium}${params}`);
+    return await axios.get(`http://localhost:9090/news-api/v1/callback-${medium}${params}`)
+    .catch(function(e) {
+      console.log(e.response);
+      return {status: e.response.status}
+    });
   } catch (error) {
     console.log(error);
   }
@@ -147,9 +154,30 @@ export const callBackURL = async (medium, params) => {
 
 export const loginCallBackURL = async (medium, params) => {
   try {
-    const res = await axios.get(`http://localhost:9090/news-api/v1/callback-${medium}-login${params}`);
-    console.log(res);
-    return res;
+    return await axios.get(`http://localhost:9090/news-api/v1/callback-${medium}-login${params}`)
+    .catch(function(e) {
+      return (e.response.status, e.data.message)
+    });
+  } catch (error) {
+    console.log(error);
+    return {statu: 404}
+  }
+};
+
+export const refreshToken = async (params) => {
+  try {
+    return await axios.get(
+      `http://localhost:9090/news-api/v1/refresh-token${params}`,
+      {
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `bearer ${store.getState().auth.accessToken}`
+        }
+      }
+    )
+    .catch(function(e) {
+      return (e.response.status, e.data.message)
+    });
   } catch (error) {
     console.log(error);
     return {statu: 404}
