@@ -3,7 +3,6 @@ import {List, ListItem, ListItemText, Avatar} from '@material-ui/core';
 import Footer from '../Footer';
 import style from './style';
 import * as utils from '../../utils/index';
-import { async } from 'q';
 
 class NewsFeed extends Component {
   state = {
@@ -22,10 +21,9 @@ class NewsFeed extends Component {
   };
 
   async componentDidMount() {
-    // const news = await utils.newsGallery();
-    // this.setState({
-    //   news: news.data.data
-    // })
+    const token = localStorage.getItem('loginCredentials');
+    console.log(token);
+    
   };
 
   render() {
@@ -34,9 +32,9 @@ class NewsFeed extends Component {
         <div style={style.newsContainer}>
           <h1 style={style.newsFeedHeader}>NEWS Feed</h1>
           {
-            this.state.news.map((news) => (
-              <div style={style.listContainer}>
-                <List style={style.listStyle}>
+            this.state.news.map((news, i) => (
+              <div style={style.listContainer} key={i}>
+                <List style={style.listStyle} key={i}>
                 <ListItem>
                   <div style={style.avatarConatainer}>
                     <img alt='' src={news.imageUrl} height="130" width="130" />

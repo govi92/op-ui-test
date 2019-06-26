@@ -66,9 +66,7 @@ class Login extends Component {
 
   loginWithGoogle = async () => {
     const response = await loginUser({ type: 'gl', email: '', password: '' });
-    console.log(response);
-    
-    // window.location.href = response;
+    window.location.href = response;
   };
 
   loginWithFacebook = async () => {
