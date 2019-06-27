@@ -39,13 +39,15 @@ class CallBackLogin extends Component {
           isOauthSuccessed: false,
         });
       } else if(res.status === 404) {
-        this.props.history.push({
-          pathname: '/login',
-          state: {error: 'You haven\'t registered before'}
-        });
         this.setState({
           isOauthSuccessed: false,
         });
+        setTimeout(() => {
+          this.props.history.push({
+            pathname: '/login',
+            state: {error: 'You haven\'t registered before'}
+          });
+        }, 1000);
       } else if(res.status === 403) {
         this.props.history.push({
           pathname: '/login',

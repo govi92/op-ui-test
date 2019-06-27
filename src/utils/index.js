@@ -154,13 +154,14 @@ export const callBackURL = async (medium, params) => {
 
 export const loginCallBackURL = async (medium, params) => {
   try {
-    return await axios.get(`http://localhost:9090/news-api/v1/callback-${medium}-login${params}`)
+    const res = await axios.get(`http://localhost:9090/news-api/v1/callback-${medium}-login${params}`)
     .catch(function(e) {
       return (e.response.status, e.data.message)
     });
+    return res;
   } catch (error) {
     console.log(error);
-    return {statu: 404}
+    return {status: 404}
   }
 };
 

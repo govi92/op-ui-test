@@ -147,7 +147,7 @@ class Login extends Component {
                   this.props.location.state &&
                   <div>
                     <p style={style.exceptionErrorText}>
-                      {this.props.location.state}
+                      {this.props.location.state.error}
                     </p>
                   </div>
                 }
