@@ -145,7 +145,7 @@ export const callBackURL = async (medium, params) => {
     return await axios.get(`http://localhost:9090/news-api/v1/callback-${medium}${params}`)
     .catch(function(e) {
       console.log(e.response);
-      return {status: e.response.status}
+      return e.response
     });
   } catch (error) {
     console.log(error);

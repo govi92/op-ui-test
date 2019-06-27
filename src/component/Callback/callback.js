@@ -36,14 +36,15 @@ class Callback extends Component {
           this.props.history.push({
             pathname: '/',
             state: {
-              error: 'Unexpected error, please try again later.'
+              error: response.data.message
             }
           });
         } else if(response.status === 403) {
+          console.log(response);
           this.props.history.push({
             pathname: '/',
             state: {
-              error: 'Given email is already registered, but need to verify the email address.'
+              error: response.data.message
             }
           });
         } else if(response.status === 400) {
