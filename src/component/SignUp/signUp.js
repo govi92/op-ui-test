@@ -83,7 +83,7 @@ class SignUp extends Component {
         isEmailEmpty: false
       });
       return;
-    } else if (password === '' && confPass === '') {
+    } else if (password !== confPass) {
       this.setState({
         isErrorOccured: true
       });
