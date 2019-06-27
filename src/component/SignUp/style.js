@@ -17,23 +17,26 @@ const style = {
 
   signWithGoogle: {
     color: 'white',
-    backgroundColor: 'red',
-    marginTop: '10px',
-    minWidth: '100%'
+    backgroundColor: '#dd4b39',
+    marginTop: '5px',
+    minWidth: '100%',
+    fontWeight: 'bold'
   },
 
   signUpWithFacebook: {
     color: 'white',
     backgroundColor: '#3b5998',
     marginTop: '10px',
-    minWidth: '100%'
+    minWidth: '100%',
+    fontWeight: 'bold'
   },
 
   signUpButton: {
     color: 'white',
-    backgroundColor: '#3b5998',
-    marginTop: '30px',
-    minWidth: '100%'
+    backgroundColor: '#007bff',
+    marginTop: '10px',
+    minWidth: '100%',
+    fontWeight: 'bold'
   },
 
   containerFluid: {
@@ -54,9 +57,9 @@ const style = {
   formContainer: {
     position: 'absolute',
     marginTop: '100px',
-    marginLeft: '35%',
+    marginLeft: '37%',
     padding: '30px',
-    height: '560px',
+    height: '590px',
     width: '26%',
     background: 'white',
     border: 'solid 1px black',
@@ -69,7 +72,7 @@ const style = {
     marginTop: '100px',
     marginLeft: '35%',
     padding: '40px',
-    height: '650px',
+    height: '670px',
     width: '26%',
     background: 'white',
     border: 'solid 1px black',
@@ -122,20 +125,30 @@ const style = {
   },
 
   errorMsg: {
-    background: '#cc0000',
-    border: 'solid 1px red',
-    borderRadius: '2%',
-    boxShadow: '1px 1px 2px black'
+    // background: '#cc0000',
+    // border: 'solid 1px red',
+    // borderRadius: '2%',
+    // boxShadow: '1px 1px 2px black'
   },
 
   errorText: {
-    margin: '5px',
-    textAlign: 'center',
-    color: 'white',
+    color: 'red',
   },
 
   exceptionText: {
     color: 'red'
+  },
+
+  signUpTextWrapper: {
+    marginTop: '20px',
+  },
+
+  signUpText: {
+    textAlign: 'center',
+  },
+
+  linkText: {
+    fontWeight: 'bold'
   }
 };
 

@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { Link } from 'react-router-dom';
 import { Button, TextField, FormControl } from '@material-ui/core'
 import { getUser } from '../actions/index';
 import { registerUser } from '../../utils/index';
@@ -21,7 +22,7 @@ class SignUp extends Component {
     isEmailEmpty: false,
     isPasswordEmpty: false,
     isErrorOccured: false,
-    isEmailValid: true,
+    isEmailNotValid: false,
     isExceptionOccured: false
   }
 
@@ -40,11 +41,10 @@ class SignUp extends Component {
     event.preventDefault();
     const { type, email, password, confPass } = this.state;
 
-    this.setState({
-      isEmailValid: utils.emailValidation(email)
-    });
+    const isEmailValid = utils.emailValidation(email);
 
-    if (confPass === password && confPass !== '' && password !== '' && email !== '' && this.state.isEmailValid) {
+    if (confPass === password && confPass !== '' && password !== '' && email !== '' && isEmailValid) {
+
       const res = await registerUser({ type, email, password });
       if (res === true) {
         this.setState({
@@ -61,33 +61,29 @@ class SignUp extends Component {
         })
       }
       return;
-    }
-
-    if (email === '' && password === '') {
+    } else if (isEmailValid === false) {
+      this.setState({
+        isEmailNotValid: true,
+      });
+    } else if (email === '' && password === '') {
       this.setState({
         isEmailEmpty: true,
         isPasswordEmpty: true
       });
       return;
-    }
-
-    if (email === '') {
+    } else if (email === '') {
       this.setState({
         isEmailEmpty: true,
         isPasswordEmpty: false
       });
       return;
-    }
-
-    if (password === '') {
+    } else if (password === '') {
       this.setState({
         isPasswordEmpty: true,
         isEmailEmpty: false
       });
       return;
-    }
-
-    if (password === '' && confPass === '') {
+    } else if (password === '' && confPass === '') {
       this.setState({
         isErrorOccured: true
       });
@@ -118,45 +114,31 @@ class SignUp extends Component {
   buttonContainer = () => {
     return (
       <div>
-        <div className='row'>
-          <div className='col-md-6'>
-            <Button
-              variant='contained' style={style.signWithGoogle}
-              onClick={this.signUpWithGoogle}
-            >
-              Sign With Google
-            </Button>
-          </div>
-          <div className='col-md-6'>
-            <Button
-              variant='contained' style={style.signUpWithFacebook}
-              onClick={this.signUpWithFacebook}
-            >
-              Sign With Facebook
-            </Button>
-          </div>
-        </div>
-        <div className='row'>
-          <div className='col-md-6'>
-            <Button
-              variant='contained'
-              style={style.signUpButton}
-              onClick={this.signUp}
-            >
-              Create Account
+        <Button
+          variant='contained'
+          style={style.signUpButton}
+          onClick={this.signUp}
+          fullWidth
+        >
+          Create Account
           </Button>
-          </div>
-          <div className='col-md-6'>
-            <Button
-              variant='contained'
-              style={style.loginButton}
-              to='/login'
-              onClick={this.switchToLogin}
-            >
-              Login
-          </Button>
-          </div>
+        <div style={style.hrContainer}>
+          <hr style={style.styleEight} />
         </div>
+        <Button
+          variant='contained' style={style.signWithGoogle}
+          onClick={this.signUpWithGoogle}
+          fullWidth
+        >
+          Sign With Google
+            </Button>
+        <Button
+          variant='contained' style={style.signUpWithFacebook}
+          onClick={this.signUpWithFacebook}
+          fullWidth
+        >
+          Sign With Facebook
+            </Button>
       </div>
     );
   }
@@ -170,24 +152,24 @@ class SignUp extends Component {
             <FormControl>
               <div>
                 <h3 style={style.topic}>CREATE YOUR <br /> ACCOUNT</h3>
-                <h4 className='text-muted' style={style.subTopic}>This is step 1</h4>
+                {/* <h4 className='text-muted' style={style.subTopic}>This is step 1</h4> */}
               </div>
               <div style={style.inputContainer}>
                 <TextField
                   id="outlined-name"
                   label="Email Address"
                   // className={}
-                  error={(this.state.isEmailEmpty | this.state.isExceptionOccured) ? true : false}
+                  error={(this.state.isEmailEmpty | this.state.isExceptionOccured | this.state.isEmailNotValid) ? true : false}
                   fullWidth
                   onChange={this.handleEventChange('email')}
                   margin="normal"
                   variant="outlined"
                 />
                 {
-                  (!this.state.isEmailEmpty && !this.state.isEmailValid) &&
+                  (!this.state.isEmailEmpty && this.state.isEmailNotValid) &&
                   <div>
                     <div style={style.errorMsg}>
-                      <p style={style.errorText}>Error: Please enter a valid email address!</p>
+                      <p style={style.errorText}>Please enter a valid email address!</p>
                     </div>
                   </div>
                 }
@@ -195,7 +177,7 @@ class SignUp extends Component {
                   this.state.isEmailEmpty &&
                   <div>
                     <div style={style.errorMsg}>
-                      <p style={style.errorText}>Error: Email shouldn't be empty!</p>
+                      <p style={style.errorText}>Email shouldn't be empty!</p>
                     </div>
                   </div>
                 }
@@ -214,7 +196,7 @@ class SignUp extends Component {
                   this.state.isPasswordEmpty &&
                   <div>
                     <div style={style.errorMsg}>
-                      <p style={style.errorText}>Error: Password shouldn't be empty!</p>
+                      <p style={style.errorText}>Password shouldn't be empty!</p>
                     </div>
                   </div>
                 }
@@ -233,7 +215,7 @@ class SignUp extends Component {
                   this.state.isErrorOccured &&
                   <div>
                     <div style={style.errorMsg}>
-                      <p style={style.errorText}>Error: Password mismatch!</p>
+                      <p style={style.errorText}>Password mismatch!</p>
                     </div>
                   </div>
                 }
@@ -250,11 +232,11 @@ class SignUp extends Component {
                   </div>
                 }
               </div>
-              {/* <div style={style.hrContainer}>
-                <hr style={style.styleEight} />
-              </div> */}
               <div>
                 {this.buttonContainer()}
+              </div>
+              <div style={style.signUpTextWrapper}>
+                <p className='text-muted' style={style.signUpText}>Already have an account? <Link style={style.linkText} to='/login'>Sign In</Link> </p>
               </div>
             </FormControl>
           </div>

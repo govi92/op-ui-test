@@ -11,7 +11,8 @@ const style = {
   loginButton: {
     color: 'white',
     backgroundColor: '#007bff',
-    marginTop: '30px',
+    fontWeight: 'bold',
+    marginTop: '20px',
     minWidth: '100%'
   },
 
@@ -78,7 +79,13 @@ const style = {
     color: 'white',
     fontWeight: 'bold',
     background: '#dd4b39',
-    width: "200px !important"
+    width: "200px !important",
+    marginTop: '10px',
+    marginBottom: '10px'
+  },
+
+  googleIcon: {
+    padding: '15px'
   },
 
   loginFacebook: {
@@ -88,7 +95,7 @@ const style = {
   },
 
   hrContainer: {
-    paddingTop: '10px'
+    paddingTop: '5px'
   },
 
   styleEight: {
@@ -106,7 +113,7 @@ const style = {
   },
 
   iconStyle: {
-    marginLeft: '15px'
+    marginRight: '10px'
   },
 
   footer: {
@@ -127,20 +134,31 @@ const style = {
   },
 
   errorMsg: {
-    background: '#cc0000',
-    border: 'solid 1px red',
-    borderRadius: '2%',
-    boxShadow: '1px 1px 2px black'
+    // background: '#cc0000',
+    // border: 'solid 1px red',
+    // borderRadius: '2%',
+    // boxShadow: '1px 1px 2px black'
   },
 
   errorText: {
-    margin: '5px',
     textAlign: 'center',
-    color: 'white',
+    color: 'red',
   },
 
   exceptionErrorText: {
     color: 'red'
+  },
+
+  signUpTextWrapper: {
+    marginTop: '20px',
+  },
+
+  signUpText: {
+    textAlign: 'center',
+  },
+
+  linkText: {
+    fontWeight: 'bold'
   }
 };
 

@@ -59,6 +59,7 @@ class Selections extends Component {
               label="Employee Account"
               // className={}
               value={null}
+              type='number'
               fullWidth
               onChange={this.handleEventChange('empAcc')}
               margin="normal"

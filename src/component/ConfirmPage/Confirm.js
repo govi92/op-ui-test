@@ -40,12 +40,15 @@ class Confirm extends Component {
                   Email has been send to <br />
                   <Link>{this.state.email}</Link>
                 </p>
+                <p>
+                  Please click the link mentioned in the<br/> email to validate your email address.
+                </p>
               </div>
 
               <div style={style.hrContainer}>
                 <hr style={style.styleEight} />
               </div>
-              <Button variant="contained" style={style.loginButton} onClick={this.backToFront}>Continue to Login</Button>
+              {/* <Button variant="contained" style={style.loginButton} onClick={this.backToFront}>Continue to Login</Button> */}
             </div>
           </div>
           <footer style={style.footer}>

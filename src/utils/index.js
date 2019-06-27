@@ -78,9 +78,9 @@ export const loginUser = async (props) => {
         return false;
       }
     } else {
-      if (response.data.success !== false) {
+      if (response.data.success) {
         const payload = response.data;
-        return payload.message;
+        return {message: payload.message, };
       } else {
         return false;
       }

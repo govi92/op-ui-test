@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import {Link} from 'react-router-dom';
 import { Button, TextField, FormControl } from '@material-ui/core'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faFacebookF, faGoogle } from "@fortawesome/free-brands-svg-icons"
+import { faGoogle, faFacebookSquare } from "@fortawesome/free-brands-svg-icons"
 import { getUser } from '../actions/index';
 import { loginUser } from '../../utils/index';
 import * as utils from '../../utils/utilityFunctions';
@@ -21,41 +22,62 @@ class Login extends Component {
     isloggedIn: false,
     isEmailEmpty: false,
     isPasswordEmpty: false,
-    isEmailValid: true,
-    isExceptionOccurred: false
+    isEmailNotValid: false,
+    isExceptionOccurred: false,
+    isCallBackErrorOccured: false
   }
 
   login = async (event) => {
     event.preventDefault();
     const { type, email, password } = this.state;
 
-    this.setState({
-      isEmailValid: utils.emailValidation(email)
-    });
-
-    if (email !== '' && password !== '' && this.state.isEmailValid) {
+    const isEmailValid = utils.emailValidation(email);
+  
+    if (email !== '' && password !== '' && isEmailValid) {
       const response = await loginUser({ type, email, password })
-
-      if (response) {
+      if (response !== false) {
         this.setState({
           isEmailEmpty: false,
-          isPasswordEmpty: false
+          isPasswordEmpty: false,
+          isEmailNotValid: false
         });
+        localStorage.setItem('loginCredentials', response);
         this.props.history.push('/newsfeed');
-        localStorage.setItem('loginCredentials', response );
       } else {
         this.setState({
           isExceptionOccurred: true
         })
       }
+
     } else if (email === '' && password !== '') {
       this.setState({
+        isEmailEmpty: true,
+      });
+
+    } else if (email !== '' && password === '' && isEmailValid) {
+      this.setState({
+        isPasswordEmpty: true,
+        isEmailEmpty: false
+      });
+
+    } else if (email !== '' && password === '' && isEmailValid === false) {
+      this.setState({
+        isEmailNotValid: true,
+        isPasswordEmpty: true,
+        isEmailEmpty: false
+      });
+
+    } else if(email === '' && password === '') {
+      this.setState({
+        isPasswordEmpty: true,
         isEmailEmpty: true
       });
-    } else if (email !== '' && password === '') {
+
+    } else if(isEmailValid === false) {
       this.setState({
-        isPasswordEmpty: true
+        isEmailNotValid: true
       });
+
     } else {
       this.setState({
         isPasswordEmpty: true,
@@ -80,12 +102,52 @@ class Login extends Component {
     })
   };
 
+  buttonContainer = () => {
+    return (
+      <div>
+        <div>
+          <Button
+            variant="contained"
+            style={style.loginButton}
+            onClick={this.login}
+          >
+            Login
+          </Button>
+        </div>
+        <div style={style.hrContainer}>
+          <hr style={style.styleEight} />
+        </div>
+        <Button
+          variant='contained'
+          style={style.loginGoogle}
+          onClick={this.loginWithGoogle}
+          fullWidth>
+          <div style={style.iconStyle}>
+            <FontAwesomeIcon icon={faGoogle} />
+          </div>
+          Login with Google
+        </Button>
+        <Button
+          variant='contained'
+          style={style.loginFacebook}
+          onClick={this.loginWithFacebook}
+          fullWidth>
+          <div style={style.iconStyle}
+          >
+            <FontAwesomeIcon icon={faFacebookSquare} />
+          </div>
+          Login with Facebook
+        </Button>
+      </div>
+    )
+  }
+
   render() {
 
     return (
       <div style={style.containerFluid}>
         <div >
-          <div style={(this.state.isEmailEmpty | this.state.isPasswordEmpty) ? style.formContainerExtended : style.formContainer}>
+          <div style={(this.state.isEmailEmpty | this.state.isPasswordEmpty | this.state.isEmailNotValid | this.state.isExceptionOccurred) ? style.formContainerExtended : style.formContainer}>
             <FormControl>
               <div>
                 <h2 style={style.topic}>LOGIN</h2>
@@ -95,25 +157,25 @@ class Login extends Component {
                   id="outlined-name"
                   label="Email Address"
                   // className={}
-                  error={(this.state.isEmailEmpty | this.state.isExceptionOccurred) ? true : false}
+                  error={(this.state.isEmailEmpty | this.state.isExceptionOccurred | this.state.isEmailNotValid) ? true : false}
                   fullWidth
                   onChange={this.handleChange('email')}
                   margin="normal"
                   variant="outlined"
                 />
                 {
-                  (!this.state.isEmailEmpty && !this.state.isEmailValid) &&
+                  this.state.isEmailEmpty &&
                   <div>
                     <div style={style.errorMsg}>
-                      <p style={style.errorText}>Error: Please enter a valid email address!</p>
+                      <p style={style.errorText}>Email shouldn't be empty!</p>
                     </div>
                   </div>
                 }
                 {
-                  this.state.isEmailEmpty &&
+                  (!this.state.isEmailEmpty && this.state.isEmailNotValid) &&
                   <div>
                     <div style={style.errorMsg}>
-                      <p style={style.errorText}>Error: Email shouldn't be empty!</p>
+                      <p style={style.errorText}>Please enter a valid email address!</p>
                     </div>
                   </div>
                 }
@@ -121,6 +183,7 @@ class Login extends Component {
                   id="outlined-name"
                   label="Password"
                   // className={}
+                  type='password'
                   error={(this.state.isPasswordEmpty | this.state.isExceptionOccurred) ? true : false}
                   fullWidth
                   onChange={this.handleChange('password')}
@@ -131,7 +194,7 @@ class Login extends Component {
                   this.state.isPasswordEmpty &&
                   <div>
                     <div style={style.errorMsg}>
-                      <p style={style.errorText}>Error: Password shouldn't be empty!</p>
+                      <p style={style.errorText}>Password shouldn't be empty!</p>
                     </div>
                   </div>
                 }
@@ -152,43 +215,11 @@ class Login extends Component {
                   </div>
                 }
               </div>
-              <div style={style.hrContainer}>
-                <hr style={style.styleEight} />
-              </div>
-              <div>
-                <div className={'row'}>
-                  <div className='col-md-6 col-xs-6'>
-                    <Button
-                      variant='contained'
-                      style={style.loginGoogle}
-                      onClick={this.loginWithGoogle}>
-                      <div style={style.iconStyle}>
-                        <FontAwesomeIcon icon={faGoogle} />
-                      </div>
-                      Login with Google
-                    </Button>
-                  </div>
-                  <div className='col-md-6 col-xs-6'>
-                    <Button
-                      variant='contained'
-                      style={style.loginFacebook}
-                      onClick={this.loginWithFacebook}>
-                      <div style={style.iconStyle}>
-                        <FontAwesomeIcon icon={faFacebookF} />
-                      </div>
-                      Login with Facebook
-                    </Button>
-                  </div>
-                </div>
-              </div>
-              <div>
-                <Button
-                  variant="contained"
-                  style={style.loginButton}
-                  onClick={this.login}
-                >
-                  Login
-                </Button>
+              {
+                this.buttonContainer()
+              }
+              <div style={style.signUpTextWrapper}>
+                <p className='text-muted' style={style.signUpText}>Don't have an account? <Link style={style.linkText} to='/'>Sign Up</Link> </p>
               </div>
             </FormControl>
           </div>
