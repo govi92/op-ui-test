@@ -21,7 +21,8 @@ class CallBackLogin extends Component {
     } else {
       if(this.props.match.params.medium === 'facebook' || this.props.match.params.medium === 'google') {
         const res = await utils.loginCallBackURL(this.props.match.params.medium, this.props.location.search);
-
+        console.log(res);
+        
       if(res.status === 200) {
         this.setState({
           isOauthSuccessed: true,

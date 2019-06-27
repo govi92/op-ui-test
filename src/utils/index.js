@@ -80,7 +80,7 @@ export const loginUser = async (props) => {
     } else {
       if (response.data.success) {
         const payload = response.data;
-        return {message: payload.message, };
+        return {message: payload.message };
       } else {
         return false;
       }
