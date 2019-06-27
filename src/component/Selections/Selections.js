@@ -35,9 +35,9 @@ class Selections extends Component {
     const {empAcc, organization, designation, accessToken} = this.state;
     if( empAcc !== '' &&  organization!== '' && designation!== '' && accessToken) {
       utils.registerCompanyDetails({empAcc, organization, designation, accessToken});
+      this.props.history.push('/login');
     }
-    this.props.history.push('/login');
-  }
+    }
 
   SelectOptions = () => {
     return (
