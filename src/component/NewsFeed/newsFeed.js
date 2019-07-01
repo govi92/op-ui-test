@@ -49,7 +49,7 @@ class NewsFeed extends Component {
             ))
           }
         </div>
-        <Footer />
+        {/* <Footer /> */}
       </div>
     )
   };

@@ -226,7 +226,7 @@ class Login extends Component {
             </FormControl>
           </div>
         </div>
-        <Footer />
+        {/* <Footer /> */}
       </div>
     )
   }

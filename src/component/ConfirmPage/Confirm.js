@@ -51,10 +51,10 @@ class Confirm extends Component {
               {/* <Button variant="contained" style={style.loginButton} onClick={this.backToFront}>Continue to Login</Button> */}
             </div>
           </div>
-          <footer style={style.footer}>
+          {/* <footer style={style.footer}>
             <h6 style={style.footerText}>Powered By </h6>
             <h4><b>GAPSTARS</b></h4> 
-          </footer>
+          </footer> */}
         </div>
       </div>
     )

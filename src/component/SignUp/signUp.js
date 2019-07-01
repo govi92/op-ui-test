@@ -23,13 +23,11 @@ class SignUp extends Component {
     isPasswordEmpty: false,
     isErrorOccured: false,
     isEmailNotValid: false,
+    isConfPasswordEmpty: false,
     isExceptionOccured: false
   }
 
-  componentDidMount() {
-    console.log(this.props.location.state);
-
-  }
+  componentDidMount() {}
 
   confirmState = () => {
     this.setState({
@@ -49,7 +47,8 @@ class SignUp extends Component {
       if (res === true) {
         this.setState({
           isEmailEmpty: false,
-          isPasswordEmpty: false
+          isPasswordEmpty: false,
+          isEmailNotValid: false,
         });
         this.props.history.push({
           pathname: '/signup/confirm',
@@ -60,34 +59,51 @@ class SignUp extends Component {
           isExceptionOccured: true
         })
       }
-      return;
-    } else if (isEmailValid === false) {
+    } 
+    if (isEmailValid === false) {
       this.setState({
         isEmailNotValid: true,
       });
-    } else if (email === '' && password === '') {
+    } else {
+      this.setState({
+        isEmailNotValid: false,
+      });
+    }
+    if (email === '') {
       this.setState({
         isEmailEmpty: true,
+      });
+    } else {
+      this.setState({
+        isEmailEmpty: false,
+      });
+    }
+    if (password === '') {
+      this.setState({
         isPasswordEmpty: true
       });
-      return;
-    } else if (email === '') {
+    } else {
       this.setState({
-        isEmailEmpty: true,
         isPasswordEmpty: false
-      });
-      return;
-    } else if (password === '') {
+      })
+    }
+    if (confPass === '') {
       this.setState({
-        isPasswordEmpty: true,
-        isEmailEmpty: false
+        isConfPasswordEmpty: true
       });
-      return;
-    } else if (password !== confPass) {
+    } else {
+      this.setState({
+        isConfPasswordEmpty: false
+      })
+    }
+    if (password !== confPass && password !== '' && confPass !== '') {
       this.setState({
         isErrorOccured: true
       });
-      return;
+    } else {
+      this.setState({
+        isErrorOccured: false
+      });
     }
   }
 
@@ -205,12 +221,21 @@ class SignUp extends Component {
                   label="Confirm Password"
                   // className={}
                   type="password"
-                  error={(this.state.isErrorOccured | this.state.isExceptionOccured) ? true : false}
+                  error={
+                    (this.state.isErrorOccured | this.state.isExceptionOccured | (this.state.isConfPasswordEmpty && !this.state.isPasswordEmpty)) ? 
+                    true : false
+                  }
                   fullWidth
                   onChange={this.handleEventChange('confPass')}
                   margin="normal"
                   variant="outlined"
                 />
+                {
+                  (this.state.isConfPasswordEmpty && !this.state.isPasswordEmpty) &&
+                    <div style={style.errorMsg}>
+                      <p style={style.errorText}>Please enter confirm password!</p>
+                    </div>
+                }
                 {
                   this.state.isErrorOccured &&
                   <div>
@@ -242,7 +267,7 @@ class SignUp extends Component {
           </div>
         </div>
         <div>
-          <Footer />
+          {/* <Footer /> */}
         </div>
       </div>
     )

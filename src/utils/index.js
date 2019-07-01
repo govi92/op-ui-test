@@ -109,7 +109,8 @@ export const confirmRegistration = async(props) => {
   try {
     const response = await axios.get(`http://localhost:9090/news-api/v1/register-confirmation/${props}`)
     .catch(function(e) {
-      console.log(e);
+      console.log(e.response);
+      return {status: e.response.status, message: e.response.data.message}
     });
     return response;
   } catch(error) {
@@ -156,12 +157,11 @@ export const loginCallBackURL = async (medium, params) => {
   try {
     const res = await axios.get(`http://localhost:9090/news-api/v1/callback-${medium}-login${params}`)
     .catch(function(e) {
-      return (e.response.status, e.data.message)
+      return ({status: e.response.status, message: e.response.data.message})
     });
     return res;
   } catch (error) {
     console.log(error);
-    return {status: 404}
   }
 };
 

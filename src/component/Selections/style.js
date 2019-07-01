@@ -33,7 +33,7 @@ const style = {
   },
 
   optionStyle: {
-    paddingTop: '30px'
+    paddingTop: '10px'
   },
 
   submitButton: {
@@ -50,6 +50,22 @@ const style = {
     bottom: 0,
     width: '100%',
     color: 'white'
+  },
+
+  errorContainer: {
+    marginLeft: '10px',
+    marginTop: '100px'
+  },
+
+  errorText: {
+    textAlign: 'center',
+    color: 'red',
+  }, 
+  errorTextLink: {
+    fontWeight: 'bold',
+    textAlign: 'center',
+    paddingLeft: '70px',
+    color: 'red',
   },
 }
 

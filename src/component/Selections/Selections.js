@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {Redirect} from 'react-router-dom';
+import {Link} from 'react-router-dom';
 import { FormControl, TextField, Button } from '@material-ui/core';
 import * as utils from '../../utils/index';
 import Footer from '../Footer';
@@ -13,7 +13,13 @@ class Selections extends Component {
     designation: '',
     firstName: 'JOHN',
     lastName: 'DOE',
-    isFormSubmitted: false
+    errorStatus: '',
+    isFormSubmitted: false,
+    isErrorOccurred: false,
+    errorMessage: '',
+    isEmpAccEmpty: false,
+    isOrgEmpty: false,
+    isDesignationEmpty: false
   }
 
   async componentDidMount() { 
@@ -21,7 +27,14 @@ class Selections extends Component {
       accessToken: this.props.match.params.params
     });
     const res = await utils.confirmRegistration(this.props.match.params.params);
-    console.log(res);
+    if(res.status !== 200) {
+      this.setState({
+        errorStatus: res.status,
+        isErrorOccurred: true,
+        errorMessage: res.message
+      })
+    }
+    console.log(res.status);
   }
 
   handleEventChange = name => event => {
@@ -36,6 +49,33 @@ class Selections extends Component {
     if( empAcc !== '' &&  organization!== '' && designation!== '' && accessToken) {
       utils.registerCompanyDetails({empAcc, organization, designation, accessToken});
       this.props.history.push('/login');
+    } 
+    if (empAcc === '') {
+      this.setState({
+        isEmpAccEmpty: true
+      });
+    } else if (empAcc !== '') {
+      this.setState({
+        isEmpAccEmpty: false
+      });
+    }
+    if (organization === '') {
+      this.setState({
+        isOrgEmpty: true
+      });
+    } else if (organization !== '') {
+      this.setState({
+        isOrgEmpty: false
+      });
+    } 
+    if (designation === '') {
+      this.setState({
+        isDesignationEmpty: true
+      });
+    } else if (designation !== '') {
+      this.setState({
+        isDesignationEmpty: false
+      });
     }
     }
 
@@ -50,10 +90,15 @@ class Selections extends Component {
               // className={}
               value={null}
               fullWidth
+              error={this.state.isOrgEmpty ? true : false}
               onChange={this.handleEventChange('organization')}
               margin="normal"
               variant="outlined"
             />
+            {
+              this.state.isOrgEmpty &&
+              <p style={style.errorText}>Organization field shouldn't be empty</p>
+            }
             <TextField
               id="outlined-name"
               label="Employee Account"
@@ -61,21 +106,37 @@ class Selections extends Component {
               value={null}
               type='number'
               fullWidth
+              error={this.state.isEmpAccEmpty ? true : false}
               onChange={this.handleEventChange('empAcc')}
               margin="normal"
               variant="outlined"
             />
+            {
+              this.state.isEmpAccEmpty &&
+              <p style={style.errorText}>Employee account shouldn't be empty</p>
+            }
             <TextField
               id="outlined-name"
               label="Designation"
               // className={}
               value={null}
               fullWidth
+              error={this.state.isDesignationEmpty ? true : false}
               onChange={this.handleEventChange('designation')}
               margin="normal"
               variant="outlined"
             />
+            {
+              this.state.isDesignationEmpty &&
+              <p style={style.errorText}>Designation field shouldn't be empty</p>
+            }
           </FormControl>
+          <div>
+            {
+              this.state.isErrorOccurred && 
+              <p style={style.errorText}>{this.state.errorMessage}</p>
+            }
+          </div>
         </div>
       </div>
     );
@@ -89,21 +150,33 @@ class Selections extends Component {
             <div>
               <h3 style={style.topic}>WELCOME {this.state.firstName} {this.state.lastName}</h3>
               <h6 className='text-muted' style={style.subTopic}>You're almost ready for take-off</h6>
-              {
-                this.SelectOptions()
-              }
             </div>
-            <div>
-              <Button 
-                variant='contained' 
-                style={style.submitButton}
-                onClick={this.onSubmit}
-                >Submit
-              </Button>
-            </div>
+            {
+              this.state.isErrorOccurred ? 
+              <div style={style.errorContainer}>
+                <p style={style.errorText}>{this.state.errorMessage}</p>
+                {
+                  (this.state.errorStatus === 400 | this.state.errorStatus === 404)  && 
+                  <Link to='/' style={style.errorTextLink}>Register Your Account</Link>
+                }
+              </div> :
+              <div>
+                {
+                  this.SelectOptions()
+                }
+                <div>
+                  <Button 
+                    variant='contained' 
+                    style={style.submitButton}
+                    onClick={this.onSubmit}
+                    >Submit
+                  </Button>
+                </div>
+              </div>
+            }
           </FormControl>
         </div>
-        <Footer />
+        {/* <Footer /> */}
       </div>
     )
   }

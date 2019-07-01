@@ -31,47 +31,10 @@ class CallBackLogin extends Component {
         localStorage.setItem('loginCredentials', res.data.data );
         this.props.history.push('/newsfeed');
 
-      } else if(res.status === 500) {
+      } else {
         this.props.history.push({
           pathname: '/login',
-          state: {error: 'Something went wrong. Please try again.'}
-        });
-        this.setState({
-          isOauthSuccessed: false,
-        });
-      } else if(res.status === 404) {
-        this.setState({
-          isOauthSuccessed: false,
-        });
-        setTimeout(() => {
-          this.props.history.push({
-            pathname: '/login',
-            state: {error: 'You haven\'t registered before'}
-          });
-        }, 1000);
-      } else if(res.status === 403) {
-        this.props.history.push({
-          pathname: '/login',
-          state: {error: 'Forbidden, You haven\'t registered before'}
-        });
-        this.setState({
-          isOauthSuccessed: false,
-        });
-      } else if(res.status === 401) {
-        this.props.history.push({
-          pathname: '/login',
-          state: {error: 'Unauthorized, Please login again to continue.'}
-        });
-        this.setState({
-          isOauthSuccessed: false,
-        });
-      } else if(res.status === 400) {
-        this.props.history.push({
-          pathname: '/login',
-          state: {error: 'Bad Request, Please login again to continue.'}
-        });
-        this.setState({
-          isOauthSuccessed: false,
+          state: {error: res.message}
         });
       }
       }
