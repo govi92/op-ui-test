@@ -23,9 +23,11 @@ class NewsFeed extends Component {
   async componentDidMount() {
     const news = await utils.newsGallery();
     
+   if( news !== false) {
     this.setState({
       news: news
-    });    
+    });   
+   } 
   };
 
   render() {

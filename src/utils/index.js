@@ -94,7 +94,11 @@ export const loginUser = async (props) => {
 export const newsGallery = async() => {
   const res = await axios.get('http://localhost:9090/news-api/v1/news/')
   .catch(function(e) {
-    return false;
+    return {
+      data: {
+        data: false
+      }
+    }
   })
   return res.data.data;
 };
