@@ -24,7 +24,6 @@ class Callback extends Component {
     } else {
       if(this.props.match.params.medium === 'facebook' || this.props.match.params.medium === 'google') {
         const response = await utils.callBackURL(this.props.match.params.medium, this.props.location.search);
-        console.log(response);
         
         if(response.status === 200) {
           this.setState({
@@ -40,7 +39,6 @@ class Callback extends Component {
             }
           });
         } else if(response.status === 403) {
-          console.log(response);
           this.props.history.push({
             pathname: '/',
             state: {

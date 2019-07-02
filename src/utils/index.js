@@ -92,16 +92,11 @@ export const loginUser = async (props) => {
 };
 
 export const newsGallery = async() => {
-  
-  return await axios.get(
-    'http://localhost:9090/news-api/v1/news/',
-    {
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `bearer ${store.getState().auth.accessToken}`
-      }
-    }
-  );
+  const res = await axios.get('http://localhost:9090/news-api/v1/news/')
+  .catch(function(e) {
+    return false;
+  })
+  return res.data.data;
 };
 
 

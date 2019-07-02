@@ -1,14 +1,14 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import {Link} from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { Button, TextField, FormControl } from '@material-ui/core'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faGoogle, faFacebookSquare } from "@fortawesome/free-brands-svg-icons"
 import { getUser } from '../actions/index';
 import { loginUser } from '../../utils/index';
 import * as utils from '../../utils/utilityFunctions';
+import NewsFeed from '../NewsFeed';
 import style from './style';
-import Footer from '../Footer';
 import store from '../store';
 
 class Login extends Component {
@@ -32,7 +32,7 @@ class Login extends Component {
     const { type, email, password } = this.state;
 
     const isEmailValid = utils.emailValidation(email);
-  
+
     if (email !== '' && password !== '' && isEmailValid) {
       const response = await loginUser({ type, email, password })
       if (response !== false) {
@@ -67,13 +67,13 @@ class Login extends Component {
         isEmailEmpty: false
       });
 
-    } else if(email === '' && password === '') {
+    } else if (email === '' && password === '') {
       this.setState({
         isPasswordEmpty: true,
         isEmailEmpty: true
       });
 
-    } else if(isEmailValid === false) {
+    } else if (isEmailValid === false) {
       this.setState({
         isEmailNotValid: true
       });
@@ -88,8 +88,6 @@ class Login extends Component {
 
   loginWithGoogle = async () => {
     const response = await loginUser({ type: 'gl', email: '', password: '' });
-    console.log(response);
-    
     window.location.href = response.message;
   };
 
@@ -150,80 +148,91 @@ class Login extends Component {
       <div style={style.containerFluid}>
         <div >
           <div style={(this.state.isEmailEmpty | this.state.isPasswordEmpty | this.state.isEmailNotValid | this.state.isExceptionOccurred) ? style.formContainerExtended : style.formContainer}>
-            <FormControl>
-              <div>
-                <h2 style={style.topic}>LOGIN</h2>
+            <div className='row'>
+              <div className='col-md-6' style={style.newsContainer}>
+                <h2 style={style.newsFeedHeader}>LATEST NEWS</h2>
+                <div style={{height: '430px', overflowX: 'scroll'}}>
+                  <NewsFeed />
+                </div>
               </div>
-              <div style={style.inputContainer}>
-                <TextField
-                  id="outlined-name"
-                  label="Email Address"
-                  // className={}
-                  error={(this.state.isEmailEmpty | this.state.isExceptionOccurred | this.state.isEmailNotValid) ? true : false}
-                  fullWidth
-                  onChange={this.handleChange('email')}
-                  margin="normal"
-                  variant="outlined"
-                />
-                {
-                  this.state.isEmailEmpty &&
+              <div style={style.verticalLine}></div>
+              <div className='col-md-5'>
+                <FormControl>
                   <div>
-                    <div style={style.errorMsg}>
-                      <p style={style.errorText}>Email shouldn't be empty!</p>
-                    </div>
+                    <h2 style={style.topic}>LOGIN</h2>
                   </div>
-                }
-                {
-                  (!this.state.isEmailEmpty && this.state.isEmailNotValid) &&
-                  <div>
-                    <div style={style.errorMsg}>
-                      <p style={style.errorText}>Please enter a valid email address!</p>
-                    </div>
+                  <div style={style.inputContainer}>
+                    <TextField
+                      id="outlined-name"
+                      label="Email Address"
+                      // className={}
+                      error={(this.state.isEmailEmpty | this.state.isExceptionOccurred | this.state.isEmailNotValid) ? true : false}
+                      fullWidth
+                      onChange={this.handleChange('email')}
+                      margin="normal"
+                      variant="outlined"
+                    />
+                    {
+                      this.state.isEmailEmpty &&
+                      <div>
+                        <div style={style.errorMsg}>
+                          <p style={style.errorText}>Email shouldn't be empty!</p>
+                        </div>
+                      </div>
+                    }
+                    {
+                      (!this.state.isEmailEmpty && this.state.isEmailNotValid) &&
+                      <div>
+                        <div style={style.errorMsg}>
+                          <p style={style.errorText}>Please enter a valid email address!</p>
+                        </div>
+                      </div>
+                    }
+                    <TextField
+                      id="outlined-name"
+                      label="Password"
+                      // className={}
+                      type='password'
+                      error={(this.state.isPasswordEmpty | this.state.isExceptionOccurred) ? true : false}
+                      fullWidth
+                      onChange={this.handleChange('password')}
+                      margin="normal"
+                      variant="outlined"
+                    />
+                    {
+                      this.state.isPasswordEmpty &&
+                      <div>
+                        <div style={style.errorMsg}>
+                          <p style={style.errorText}>Password shouldn't be empty!</p>
+                        </div>
+                      </div>
+                    }
+                    {
+                      this.state.isExceptionOccurred &&
+                      <div>
+                        <p style={style.exceptionErrorText}>
+                          {store.getState().auth.errorMsg}
+                        </p>
+                      </div>
+                    }
+                    {
+                      this.props.location.state &&
+                      <div>
+                        <p style={style.exceptionErrorText}>
+                          {this.props.location.state.error}
+                        </p>
+                      </div>
+                    }
                   </div>
-                }
-                <TextField
-                  id="outlined-name"
-                  label="Password"
-                  // className={}
-                  type='password'
-                  error={(this.state.isPasswordEmpty | this.state.isExceptionOccurred) ? true : false}
-                  fullWidth
-                  onChange={this.handleChange('password')}
-                  margin="normal"
-                  variant="outlined"
-                />
-                {
-                  this.state.isPasswordEmpty &&
-                  <div>
-                    <div style={style.errorMsg}>
-                      <p style={style.errorText}>Password shouldn't be empty!</p>
-                    </div>
+                  {
+                    this.buttonContainer()
+                  }
+                  <div style={style.signUpTextWrapper}>
+                    <p className='text-muted' style={style.signUpText}>Don't have an account? <Link style={style.linkText} to='/'>Sign Up</Link> </p>
                   </div>
-                }
-                {
-                  this.state.isExceptionOccurred &&
-                  <div>
-                    <p style={style.exceptionErrorText}>
-                      {store.getState().auth.errorMsg}
-                    </p>
-                  </div>
-                }
-                {
-                  this.props.location.state &&
-                  <div>
-                    <p style={style.exceptionErrorText}>
-                      {this.props.location.state.error}
-                    </p>
-                  </div>
-                }
+                </FormControl>
               </div>
-              {
-                this.buttonContainer()
-              }
-              <div style={style.signUpTextWrapper}>
-                <p className='text-muted' style={style.signUpText}>Don't have an account? <Link style={style.linkText} to='/'>Sign Up</Link> </p>
-              </div>
-            </FormControl>
+            </div>
           </div>
         </div>
         {/* <Footer /> */}

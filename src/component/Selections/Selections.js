@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import {Link} from 'react-router-dom';
 import { FormControl, TextField, Button } from '@material-ui/core';
 import * as utils from '../../utils/index';
-import Footer from '../Footer';
 import style from './style';
 
 class Selections extends Component {
@@ -34,7 +33,6 @@ class Selections extends Component {
         errorMessage: res.message
       })
     }
-    console.log(res.status);
   }
 
   handleEventChange = name => event => {

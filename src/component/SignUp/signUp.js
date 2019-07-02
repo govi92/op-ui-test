@@ -9,6 +9,7 @@ import * as util from '../../utils/index';
 import Footer from '../Footer';
 import style from './style';
 import store from '../store';
+import NewsFeed from '../NewsFeed';
 
 class SignUp extends Component {
   state = {
@@ -27,7 +28,7 @@ class SignUp extends Component {
     isExceptionOccured: false
   }
 
-  componentDidMount() {}
+  componentDidMount() { }
 
   confirmState = () => {
     this.setState({
@@ -59,7 +60,7 @@ class SignUp extends Component {
           isExceptionOccured: true
         })
       }
-    } 
+    }
     if (isEmailValid === false) {
       this.setState({
         isEmailNotValid: true,
@@ -165,105 +166,116 @@ class SignUp extends Component {
       <div style={style.containerFluid}>
         <div className={style.formWrapper}>
           <div style={(this.state.isEmailEmpty | this.state.isErrorOccured | this.props.location.state) ? style.formContainerExtended : style.formContainer}>
-            <FormControl>
-              <div>
-                <h3 style={style.topic}>CREATE YOUR <br /> ACCOUNT</h3>
-                {/* <h4 className='text-muted' style={style.subTopic}>This is step 1</h4> */}
+            <div className='row'>
+              <div className='col-md-6' style={style.newsContainer}>
+                <h2 style={style.newsFeedHeader}>LATEST NEWS</h2>
+                <div style={{height: '430px', overflowX: 'scroll'}}>
+                  <NewsFeed />
+                </div>
               </div>
-              <div style={style.inputContainer}>
-                <TextField
-                  id="outlined-name"
-                  label="Email Address"
-                  // className={}
-                  error={(this.state.isEmailEmpty | this.state.isExceptionOccured | this.state.isEmailNotValid) ? true : false}
-                  fullWidth
-                  onChange={this.handleEventChange('email')}
-                  margin="normal"
-                  variant="outlined"
-                />
-                {
-                  (!this.state.isEmailEmpty && this.state.isEmailNotValid) &&
+              <div style={style.verticalLine}></div>
+              <div className='col-md-5' style={style.formControlCont}>
+                <FormControl>
                   <div>
-                    <div style={style.errorMsg}>
-                      <p style={style.errorText}>Please enter a valid email address!</p>
-                    </div>
+                    <h3 style={style.topic}>CREATE YOUR <br /> ACCOUNT</h3>
+                    {/* <h4 className='text-muted' style={style.subTopic}>This is step 1</h4> */}
                   </div>
-                }
-                {
-                  this.state.isEmailEmpty &&
+                  <div style={style.inputContainer}>
+                    <TextField
+                      id="outlined-name"
+                      label="Email Address"
+                      // className={}
+                      error={(this.state.isEmailEmpty | this.state.isExceptionOccured | this.state.isEmailNotValid) ? true : false}
+                      fullWidth
+                      onChange={this.handleEventChange('email')}
+                      margin="normal"
+                      variant="outlined"
+                    />
+                    {
+                      (!this.state.isEmailEmpty && this.state.isEmailNotValid) &&
+                      <div>
+                        <div style={style.errorMsg}>
+                          <p style={style.errorText}>Please enter a valid email address!</p>
+                        </div>
+                      </div>
+                    }
+                    {
+                      this.state.isEmailEmpty &&
+                      <div>
+                        <div style={style.errorMsg}>
+                          <p style={style.errorText}>Email shouldn't be empty!</p>
+                        </div>
+                      </div>
+                    }
+                    <TextField
+                      id="outlined-name"
+                      label="Password"
+                      // className={}
+                      type="password"
+                      error={(this.state.isPasswordEmpty | this.state.isErrorOccured | this.state.isExceptionOccured) ? true : false}
+                      fullWidth
+                      onChange={this.handleEventChange('password')}
+                      margin="normal"
+                      variant="outlined"
+                    />
+                    {
+                      this.state.isPasswordEmpty &&
+                      <div>
+                        <div style={style.errorMsg}>
+                          <p style={style.errorText}>Password shouldn't be empty!</p>
+                        </div>
+                      </div>
+                    }
+                    <TextField
+                      id="outlined-name"
+                      label="Confirm Password"
+                      // className={}
+                      type="password"
+                      error={
+                        (this.state.isErrorOccured | this.state.isExceptionOccured | (this.state.isConfPasswordEmpty && !this.state.isPasswordEmpty)) ?
+                          true : false
+                      }
+                      fullWidth
+                      onChange={this.handleEventChange('confPass')}
+                      margin="normal"
+                      variant="outlined"
+                    />
+                    {
+                      (this.state.isConfPasswordEmpty && !this.state.isPasswordEmpty) &&
+                      <div style={style.errorMsg}>
+                        <p style={style.errorText}>Please enter confirm password!</p>
+                      </div>
+                    }
+                    {
+                      this.state.isErrorOccured &&
+                      <div>
+                        <div style={style.errorMsg}>
+                          <p style={style.errorText}>Password mismatch!</p>
+                        </div>
+                      </div>
+                    }
+                    {
+                      this.state.isExceptionOccured &&
+                      <div>
+                        <p style={style.exceptionText}>{store.getState().auth.errorMsg}</p>
+                      </div>
+                    }
+                    {
+                      this.props.location.state &&
+                      <div>
+                        <p style={style.exceptionText}>{this.props.location.state.error}</p>
+                      </div>
+                    }
+                  </div>
                   <div>
-                    <div style={style.errorMsg}>
-                      <p style={style.errorText}>Email shouldn't be empty!</p>
-                    </div>
+                    {this.buttonContainer()}
                   </div>
-                }
-                <TextField
-                  id="outlined-name"
-                  label="Password"
-                  // className={}
-                  type="password"
-                  error={(this.state.isPasswordEmpty | this.state.isErrorOccured | this.state.isExceptionOccured) ? true : false}
-                  fullWidth
-                  onChange={this.handleEventChange('password')}
-                  margin="normal"
-                  variant="outlined"
-                />
-                {
-                  this.state.isPasswordEmpty &&
-                  <div>
-                    <div style={style.errorMsg}>
-                      <p style={style.errorText}>Password shouldn't be empty!</p>
-                    </div>
+                  <div style={style.signUpTextWrapper}>
+                    <p className='text-muted' style={style.signUpText}>Already have an account? <Link style={style.linkText} to='/login'>Sign In</Link> </p>
                   </div>
-                }
-                <TextField
-                  id="outlined-name"
-                  label="Confirm Password"
-                  // className={}
-                  type="password"
-                  error={
-                    (this.state.isErrorOccured | this.state.isExceptionOccured | (this.state.isConfPasswordEmpty && !this.state.isPasswordEmpty)) ? 
-                    true : false
-                  }
-                  fullWidth
-                  onChange={this.handleEventChange('confPass')}
-                  margin="normal"
-                  variant="outlined"
-                />
-                {
-                  (this.state.isConfPasswordEmpty && !this.state.isPasswordEmpty) &&
-                    <div style={style.errorMsg}>
-                      <p style={style.errorText}>Please enter confirm password!</p>
-                    </div>
-                }
-                {
-                  this.state.isErrorOccured &&
-                  <div>
-                    <div style={style.errorMsg}>
-                      <p style={style.errorText}>Password mismatch!</p>
-                    </div>
-                  </div>
-                }
-                {
-                  this.state.isExceptionOccured &&
-                  <div>
-                    <p style={style.exceptionText}>{store.getState().auth.errorMsg}</p>
-                  </div>
-                }
-                {
-                  this.props.location.state &&
-                  <div>
-                    <p style={style.exceptionText}>{this.props.location.state.error}</p>
-                  </div>
-                }
+                </FormControl>
               </div>
-              <div>
-                {this.buttonContainer()}
-              </div>
-              <div style={style.signUpTextWrapper}>
-                <p className='text-muted' style={style.signUpText}>Already have an account? <Link style={style.linkText} to='/login'>Sign In</Link> </p>
-              </div>
-            </FormControl>
+            </div>
           </div>
         </div>
         <div>

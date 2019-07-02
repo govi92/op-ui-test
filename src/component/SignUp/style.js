@@ -50,30 +50,38 @@ const style = {
   },
 
   formWrapper: {
-    // alignItems: 'center',
-    // justifyContent: 'center',
+    // width: '30%',
   },
 
   formContainer: {
     position: 'absolute',
     marginTop: '100px',
-    marginLeft: '37%',
+    marginLeft: '20%',
+    marginRight: '20%',
     padding: '30px',
     height: '590px',
-    width: '26%',
     background: 'white',
     border: 'solid 1px black',
     borderRadius: '2%',
     boxShadow: '1px 1px 5px black'
   },
 
+  formControlCont: {
+    marginLeft: '20px'
+  },
+
+  newsContainer: {
+    marginLeft: '20px',
+    marginRight: '10px'
+  },
+
   formContainerExtended: {
     position: 'absolute',
     marginTop: '100px',
-    marginLeft: '35%',
+    marginLeft: '20%',
+    marginRight: '20%',
     padding: '40px',
     height: '670px',
-    width: '26%',
     background: 'white',
     border: 'solid 1px black',
     borderRadius: '2%',
@@ -149,7 +157,21 @@ const style = {
 
   linkText: {
     fontWeight: 'bold'
-  }
+  },
+
+  verticalLine: {
+    width: '1px',
+    backgroundColor: 'lightgray',
+    height: '530px',
+    float: 'left',
+    marginLeft: '10px',
+    marginRight: '10px'
+  },
+
+  newsFeedHeader: {
+    textAlign: 'center',
+    paddingBottom: '20px'
+  },
 };
 
 export default style;

@@ -22,10 +22,6 @@ const style = {
     overflow: 'scroll'
   },
 
-  newsFeedHeader: {
-    textAlign: 'center'
-  },
-
   newsFeedText: {
     overflow: 'hidden',
     display: '-webkit-box',
@@ -38,7 +34,8 @@ const style = {
   listContainer: {
     border: '1px solid transparent',
     boxShadow: '1px 1px 2px gray',
-    marginBottom: '5px'
+    marginBottom: '5px',
+    overflowX: 'scroll'
   },
 
   listStyle: {

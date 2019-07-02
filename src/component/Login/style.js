@@ -34,10 +34,10 @@ const style = {
   formContainer: {
     position: 'absolute',
     marginTop: '100px',
-    marginLeft: '37%',
+    marginLeft: '20%',
+    marginRight: '20%',
     padding: '30px',
-    height: '500px',
-    width: '25%',
+    height: '550px',
     background: 'white',
     border: 'solid 1px white',
     borderColor: 'transparent',
@@ -48,14 +48,19 @@ const style = {
   formContainerExtended: {
     position: 'absolute',
     marginTop: '100px',
-    marginLeft: '35%',
+    marginLeft: '20%',
+    marginRight: '20%',
     padding: '30px',
-    height: '560px',
-    width: '30%',
+    height: '580px',
     background: 'white',
     border: 'solid 1px black',
     borderRadius: '2%',
     boxShadow: '1px 1px 5px black'
+  },
+
+  newsContainer: {
+    marginLeft: '20px',
+    marginRight: '10px',
   },
 
   topic: {
@@ -159,7 +164,21 @@ const style = {
 
   linkText: {
     fontWeight: 'bold'
-  }
+  }, 
+
+  verticalLine: {
+    width: '1px',
+    backgroundColor: 'lightgray',
+    height: '440px',
+    float: 'left',
+    marginLeft: '10px',
+    marginRight: '10px'
+  },
+
+  newsFeedHeader: {
+    textAlign: 'center',
+    paddingBottom: '20px'
+  },
 };
 
 export default style;

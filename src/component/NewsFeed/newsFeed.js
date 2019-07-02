@@ -21,16 +21,18 @@ class NewsFeed extends Component {
   };
 
   async componentDidMount() {
-    const token = localStorage.getItem('loginCredentials');
-    console.log(token);
+    const news = await utils.newsGallery();
     
+    this.setState({
+      news: news
+    });    
   };
 
   render() {
     return(
-      <div style={style.containerFluid}>
-        <div style={style.newsContainer}>
-          <h1 style={style.newsFeedHeader}>NEWS Feed</h1>
+      // <div style={style.containerFluid}>
+        // <div style={style.newsContainer}>
+          <div>
           {
             this.state.news.map((news, i) => (
               <div style={style.listContainer} key={i}>
@@ -48,9 +50,9 @@ class NewsFeed extends Component {
               </div>
             ))
           }
-        </div>
-        {/* <Footer /> */}
-      </div>
+          </div>
+        // </div>
+      // </div>
     )
   };
 }
