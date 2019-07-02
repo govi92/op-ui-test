@@ -6,10 +6,9 @@ import { getUser } from '../actions/index';
 import { registerUser } from '../../utils/index';
 import * as utils from '../../utils/utilityFunctions';
 import * as util from '../../utils/index';
-import Footer from '../Footer';
-import style from './style';
 import store from '../store';
 import NewsFeed from '../NewsFeed';
+import style from './style';
 
 class SignUp extends Component {
   state = {
@@ -184,7 +183,6 @@ class SignUp extends Component {
                     <TextField
                       id="outlined-name"
                       label="Email Address"
-                      // className={}
                       error={(this.state.isEmailEmpty | this.state.isExceptionOccured | this.state.isEmailNotValid) ? true : false}
                       fullWidth
                       onChange={this.handleEventChange('email')}

@@ -55,11 +55,11 @@ const style = {
 
   formContainer: {
     position: 'absolute',
-    marginTop: '100px',
+    marginTop: '50px',
     marginLeft: '20%',
     marginRight: '20%',
     padding: '30px',
-    height: '590px',
+    height: '660px',
     background: 'white',
     border: 'solid 1px black',
     borderRadius: '2%',

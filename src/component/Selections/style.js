@@ -11,7 +11,7 @@ const style = {
     marginTop: '100px',
     marginLeft: '39%',
     padding: '30px',
-    height: '500px',
+    height: '560px',
     wdith: '30%',
     background: 'white',
     border: 'solid 1px black',

@@ -7,6 +7,7 @@ import style from './style';
 class Selections extends Component {
   state = {
     empAcc: '',
+    name: '',
     accessToken: '',
     organization: '',
     designation: '',
@@ -18,7 +19,8 @@ class Selections extends Component {
     errorMessage: '',
     isEmpAccEmpty: false,
     isOrgEmpty: false,
-    isDesignationEmpty: false
+    isDesignationEmpty: false,
+    isNameEmpty: false
   }
 
   async componentDidMount() { 
@@ -26,12 +28,14 @@ class Selections extends Component {
       accessToken: this.props.match.params.params
     });
     const res = await utils.confirmRegistration(this.props.match.params.params);
-    if(res.status !== 200) {
-      this.setState({
-        errorStatus: res.status,
-        isErrorOccurred: true,
-        errorMessage: res.message
-      })
+    if(res) {
+      if(res.status !== 200) {
+        this.setState({
+          errorStatus: res.status,
+          isErrorOccurred: true,
+          errorMessage: res.message
+        })
+      }
     }
   }
 
@@ -43,9 +47,9 @@ class Selections extends Component {
 
   onSubmit = (event) => {
     event.preventDefault();
-    const {empAcc, organization, designation, accessToken} = this.state;
-    if( empAcc !== '' &&  organization!== '' && designation!== '' && accessToken) {
-      utils.registerCompanyDetails({empAcc, organization, designation, accessToken});
+    const {empAcc, name, organization, designation, accessToken} = this.state;
+    if( empAcc !== '' &&  organization!== '' && designation!== '' && name !== '' && accessToken) {
+      utils.registerCompanyDetails({empAcc, name, organization, designation, accessToken});
       this.props.history.push('/login');
     } 
     if (empAcc === '') {
@@ -55,6 +59,15 @@ class Selections extends Component {
     } else if (empAcc !== '') {
       this.setState({
         isEmpAccEmpty: false
+      });
+    }
+    if (name === '') {
+      this.setState({
+        isNameEmpty: true
+      });
+    } else if (name !== '') {
+      this.setState({
+        isNameEmpty: false
       });
     }
     if (organization === '') {
@@ -84,6 +97,21 @@ class Selections extends Component {
           <FormControl variant="outlined" style={style.formControl}>
             <TextField
               id="outlined-name"
+              label="name"
+              // className={}
+              value={null}
+              fullWidth
+              error={this.state.isNameEmpty ? true : false}
+              onChange={this.handleEventChange('name')}
+              margin="normal"
+              variant="outlined"
+            />
+            {
+              this.state.isNameEmpty &&
+              <p style={style.errorText}>Name field shouldn't be empty</p>
+            }
+            <TextField
+              id="outlined-name"
               label="Organization/Industry"
               // className={}
               value={null}
@@ -97,6 +125,7 @@ class Selections extends Component {
               this.state.isOrgEmpty &&
               <p style={style.errorText}>Organization field shouldn't be empty</p>
             }
+            
             <TextField
               id="outlined-name"
               label="Employee Account"
