@@ -36,7 +36,8 @@ export const registerCompanyDetails = async (props) => {
       {
         organization: props.organization,
         designation: props.designation,
-        employeeCount: parseInt(props.empAcc)
+        employeeCount: parseInt(props.empAcc),
+        name: props.name
       },
       {
         headers: {
