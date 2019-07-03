@@ -97,21 +97,6 @@ class Selections extends Component {
           <FormControl variant="outlined" style={style.formControl}>
             <TextField
               id="outlined-name"
-              label="name"
-              // className={}
-              value={null}
-              fullWidth
-              error={this.state.isNameEmpty ? true : false}
-              onChange={this.handleEventChange('name')}
-              margin="normal"
-              variant="outlined"
-            />
-            {
-              this.state.isNameEmpty &&
-              <p style={style.errorText}>Name field shouldn't be empty</p>
-            }
-            <TextField
-              id="outlined-name"
               label="Organization/Industry"
               // className={}
               value={null}
@@ -125,7 +110,21 @@ class Selections extends Component {
               this.state.isOrgEmpty &&
               <p style={style.errorText}>Organization field shouldn't be empty</p>
             }
-            
+            <TextField
+              id="outlined-name"
+              label="name"
+              // className={}
+              value={null}
+              fullWidth
+              error={this.state.isNameEmpty ? true : false}
+              onChange={this.handleEventChange('name')}
+              margin="normal"
+              variant="outlined"
+            />
+            {
+              this.state.isNameEmpty &&
+              <p style={style.errorText}>Name field shouldn't be empty</p>
+            }
             <TextField
               id="outlined-name"
               label="Employee Account"
