@@ -14,8 +14,12 @@ import {
   Tab
 } from '@material-ui/core';
 import MenuIcon from '@material-ui/icons/Menu';
+import LockIcon from '@material-ui/icons/Lock';
 import TabContainer from './component/TabContainer';
 import * as utils from '../../utils/index';
+import { FETCH_USERS_LIST } from '../actions/types';
+import { fetchUserList } from '../actions/index'
+import store from '../store';
 import styles from './style'
 
 
@@ -37,20 +41,27 @@ class Dashboard extends Component {
 
   async componentDidMount() {
     const res = await utils.usersList();
-    if(res.data.data) {
+    if (res.data.data) {
+      store.dispatch(fetchUserList({ type: FETCH_USERS_LIST, payload: res.data.data }));
       this.setState({
-        users: res.data.data
+        users: store.getState().users.users.payload
       });
     }
-    console.log(this.state.users.map((user, index) => {
-      return user.name
-    }));
-    
   }
 
-  onLockStateChange = () => {
-    console.log('Lock status changed..');
-    this.setState({ locked: !this.state.locked })
+  onLockStateChange = async (name) => {
+    const { ref, mode, locked } = this.state;
+    this.state.users.filter((user, index) => {
+      if (user.name === name) {
+        user.locked = !user.locked;
+        this.setState({
+          locked: user.locked
+        })
+      }
+    });
+    store.dispatch(fetchUserList({ type: FETCH_USERS_LIST, payload: this.state.users }));
+    const response = await utils.lockUserEndPoint({ mode, ref, locked });
+    console.log(response);
   }
 
   onClick = (name, ref, mode, locked) => {
@@ -96,7 +107,7 @@ class Dashboard extends Component {
           </TableHead>
           <TableBody>
             {users.filter((user) => {
-              if(user.role === 'super') {
+              if (user.role === 'super') {
                 return false;
               }
               return true;
@@ -108,13 +119,12 @@ class Dashboard extends Component {
               >
                 <TableCell component="th" scope="row">
                   {user.name}
-                </TableCell>
+                </TableCell>  
                 <TableCell >
-                  {/* <Button
-                    style={(user.lock) ? styles.buttonStyleLock : styles.buttonStyle}
-                  >
-                    {(user.lock) ? 'lock' : 'unlock'}
-                  </Button> */}
+                  {
+                    !user.locked &&
+                    <LockIcon />
+                  }
                 </TableCell>
               </TableRow>
             ))}

@@ -194,13 +194,13 @@ export const refreshToken = async (params) => {
 };
 
 export const lockUserEndPoint = async(params) => {
-  console.log(params.type, params.email, params.lockStatus);
+  console.log(params.mode, params.ref, params.locked);
   console.log("BEARER >>", store.getState().auth)
   try {
     return await axios.post('/news-api/v1/lock-user', {
-      mode: params.type,
-      cred: params.email,
-      lock: params.lockStatus
+      mode: params.mode,
+      cred: params.ref,
+      lock: params.locked
     },
     {
       headers: {

@@ -23,8 +23,6 @@ class TabContainer extends Component {
     this.setState({
       lockStatus: !lockStatus
     });
-    const response = await utils.lockUserEndPoint({ type, email, lockStatus });
-    console.log(response);
   };
 
   render() {
@@ -53,7 +51,7 @@ class TabContainer extends Component {
                   this.props.lockState !== '' &&
                   <Button
                     style={(this.props.lockState) ? styles.buttonStyleLock : styles.buttonStyle}
-                    onClick={() => this.props.lockStatusChange()}
+                    onClick={() => this.props.lockStatusChange(this.props.name)}
                   >
                     {(this.props.lockState) ? 'lock' : 'unlock'}
                   </Button>
