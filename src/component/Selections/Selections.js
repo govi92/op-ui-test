@@ -112,7 +112,7 @@ class Selections extends Component {
             }
             <TextField
               id="outlined-name"
-              label="name"
+              label="Name"
               // className={}
               value={null}
               fullWidth
@@ -171,7 +171,10 @@ class Selections extends Component {
   render() {
     return (
       <div style={style.containerFluid}>
-        <div style={style.formContainer}>
+        <div style={
+          (this.state.isErrorOccurred | this.state.isDesignationEmpty | this.state.isEmpAccEmpty | this.state.isNameEmpty | this.state.isOrgEmpty )
+           ? style.formContainerExtended : style.formContainer
+          }>
           <FormControl>
             <div>
               <h3 style={style.topic}>WELCOME {this.state.firstName} {this.state.lastName}</h3>

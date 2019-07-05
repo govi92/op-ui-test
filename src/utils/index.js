@@ -69,17 +69,21 @@ export const loginUser = async (props) => {
         store.dispatch(fetchError({ type: FETCH_ERROR, payload: error.response }))
         return false;
       });
+      console.log(response);
+      
     if(props.type === 'op') {
       if (response !== false) {
         const payload = response.data.data;
         store.dispatch(getUser({ type: LOGIN_USER, payload }));
         localStorage.setItem('loginStats', payload);
-        return payload.accessToken;
+        return payload;
       } else {
         return false;
       }
     } else {
       if (response.data.success) {
+        console.log(response.data);
+        
         const payload = response.data;
         return {message: payload.message };
       } else {
@@ -155,10 +159,14 @@ export const callBackURL = async (medium, params) => {
 
 export const loginCallBackURL = async (medium, params) => {
   try {
-    const res = await axios.get(`http://localhost:9090/news-api/v1/callback-${medium}-login${params}`)
+    const res = await axios.get(`/news-api/v1/callback-${medium}-login${params}`)
     .catch(function(e) {
       return ({status: e.response.status, message: e.response.data.message})
     });
+    const payload = res.data.data;
+    store.dispatch(getUser({ type: LOGIN_USER, payload }));
+    console.log(res.data.data);
+    
     return res;
   } catch (error) {
     console.log(error);
@@ -184,3 +192,42 @@ export const refreshToken = async (params) => {
     return {statu: 404}
   }
 };
+
+export const lockUserEndPoint = async(params) => {
+  console.log(params.type, params.email, params.lockStatus);
+  console.log("BEARER >>", store.getState().auth)
+  try {
+    return await axios.post('/news-api/v1/lock-user', {
+      mode: params.type,
+      cred: params.email,
+      lock: params.lockStatus
+    },
+    {
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `bearer ${store.getState().auth.accessToken}`
+      }
+    }).catch(function(error) {
+      return error.response
+    });
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const usersList = async () => {
+  console.log(store.getState().auth.accessToken);
+  
+  try {
+    return await axios.get('/news-api/v1/users',{
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `bearer ${store.getState().auth.accessToken}`
+      }
+    }).catch(function(error) {
+      return error.response
+    });
+  } catch (error) {
+    console.log(error);
+  }
+}

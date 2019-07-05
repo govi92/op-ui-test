@@ -34,15 +34,21 @@ class Login extends Component {
     const isEmailValid = utils.emailValidation(email);
 
     if (email !== '' && password !== '' && isEmailValid) {
-      const response = await loginUser({ type, email, password })
+      const response = await loginUser({ type, email, password });
+      console.log(response);
+      
       if (response !== false) {
         this.setState({
           isEmailEmpty: false,
           isPasswordEmpty: false,
           isEmailNotValid: false
         });
-        localStorage.setItem('loginCredentials', response);
-        this.props.history.push('/newsfeed');
+        localStorage.setItem('loginCredentials', response.accessToken);
+        if(response.role === 'super') {
+          this.props.history.push('/dashboard');
+        } else {
+          this.props.history.push('/newsfeed');
+        }
       } else {
         this.setState({
           isExceptionOccurred: true

@@ -19,6 +19,19 @@ const style = {
     boxShadow: '1px 1px 5px black'
   },
 
+  formContainerExtended: {
+    position: 'absolute',
+    marginTop: '100px',
+    marginLeft: '39%',
+    padding: '30px',
+    height: '670px',
+    wdith: '30%',
+    background: 'white',
+    border: 'solid 1px black',
+    borderRadius: '2%',
+    boxShadow: '1px 1px 5px black'
+  },
+
   topic: {
     textAlign: 'center'
   },
@@ -28,7 +41,7 @@ const style = {
   },
 
   formControl: {
-    margin: '5px',
+    // margin: '5px',
     minWidth: 290,
   },
 
