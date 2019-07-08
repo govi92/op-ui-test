@@ -15,6 +15,7 @@ import {
 } from '@material-ui/core';
 import MenuIcon from '@material-ui/icons/Menu';
 import LockIcon from '@material-ui/icons/Lock';
+import UnLockIcon from '@material-ui/icons/LockOpen';
 import TabContainer from './component/TabContainer';
 import * as utils from '../../utils/index';
 import { FETCH_USERS_LIST } from '../actions/types';
@@ -29,7 +30,7 @@ class Dashboard extends Component {
     name: undefined,
     ref: undefined,
     mode: '',
-    locked: '',
+    locked: false,
     value: 0,
     newValue: '',
     users: [
@@ -50,18 +51,31 @@ class Dashboard extends Component {
   }
 
   onLockStateChange = async (name) => {
-    const { ref, mode, locked } = this.state;
     this.state.users.filter((user, index) => {
-      if (user.name === name) {
-        user.locked = !user.locked;
-        this.setState({
-          locked: user.locked
-        })
+      if (user.name !== name) {
+        return false
       }
-    });
-    store.dispatch(fetchUserList({ type: FETCH_USERS_LIST, payload: this.state.users }));
-    const response = await utils.lockUserEndPoint({ mode, ref, locked });
-    console.log(response);
+      return true;
+    }).map((user, index) => {    
+        user.locked = !user.locked;
+        if(user.locked) {
+          this.setState({
+            locked: true
+          });
+        } else {
+          this.setState({
+            locked: false
+          });
+        }
+      });
+
+      store.dispatch(fetchUserList({ type: FETCH_USERS_LIST, payload: this.state.users }));
+      
+      setTimeout(async () => {
+        const {mode, ref, locked} = this.state;
+        const response = await utils.lockUserEndPoint({ mode, ref, locked });
+        console.log(response);
+      }, 1000);
   }
 
   onClick = (name, ref, mode, locked) => {
@@ -122,8 +136,8 @@ class Dashboard extends Component {
                 </TableCell>  
                 <TableCell >
                   {
-                    !user.locked &&
-                    <LockIcon />
+                    (user.locked === true) ?
+                    <LockIcon /> : <UnLockIcon />
                   }
                 </TableCell>
               </TableRow>

@@ -11,7 +11,6 @@ class TabContainer extends Component {
 
   componentDidMount() {
     console.log(this.props.lockState, this.props.name);
-    // console.log(this.state.lockStatus);
     this.setState({
       lockStatus: this.props.lockState
     })
@@ -20,18 +19,27 @@ class TabContainer extends Component {
   toggleLockState = async () => {
     const { type, email } = this.props;
     const { lockStatus } = this.state;
-    this.setState({
-      lockStatus: !lockStatus
-    });
+    
+    if(lockStatus === null) {
+      this.setState({
+        lockStatus: true
+      });
+    } else {
+      this.setState({
+        lockStatus: !lockStatus
+      });
+    }
+    
   };
 
   render() {
-    console.log(this.props.lockState);
     return (
       <Typography component="div" style={{ padding: 8 * 3 }}>
         <List component="nav" aria-label="Main mailbox folders">
           <ListItem>
-            <ListItemText primary="Name" secondary={this.props.name} />
+            <div style={{ minWidth: '307px' }}>
+              <ListItemText primary="Name" secondary={this.props.name} />
+            </div>
             <ListItemText primary="Email" secondary={this.props.email} />
           </ListItem>
           <ListItem>
@@ -50,10 +58,10 @@ class TabContainer extends Component {
                 {
                   this.props.lockState !== '' &&
                   <Button
-                    style={(this.props.lockState) ? styles.buttonStyleLock : styles.buttonStyle}
+                    style={(this.props.lockState) ? styles.buttonStyle : styles.buttonStyleLock}
                     onClick={() => this.props.lockStatusChange(this.props.name)}
                   >
-                    {(this.props.lockState) ? 'lock' : 'unlock'}
+                    {(this.props.lockState === true) ? 'unlock' : 'lock'}
                   </Button>
                 }
               </div>

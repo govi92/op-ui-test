@@ -14,8 +14,8 @@ function App() {
   return (
     <BrowserRouter>
       <div>
-        <Route exact path="/" component={SignUp} />
-        <Route exact path="/login" component={Login} />
+        <Route exact path="/" component={Login} />
+        <Route exact path="/signup" component={SignUp} />
         <Route path="/signup/confirm" component={Confirm} />
         <Route path="/dashboard" component={Dashboard} />
         <Route path="/selections/:params" component={Selections} />
