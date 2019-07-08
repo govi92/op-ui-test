@@ -8,6 +8,7 @@ import Callback from './Callback';
 import CallBackLogin from './CallBackLogin';
 import NewsFeed from './NewsFeed';
 import Dashboard from './Dashboard';
+import Home from './Home';
  
 
 function App() {
@@ -18,10 +19,11 @@ function App() {
         <Route exact path="/signup" component={SignUp} />
         <Route path="/signup/confirm" component={Confirm} />
         <Route path="/dashboard" component={Dashboard} />
+        <Route path="/home" component={Home} />
         <Route path="/selections/:params" component={Selections} />
         <Route exact path="/callback/:medium" component={Callback} />
         <Route path="/callback/login/:medium" component={CallBackLogin} />
-        <Route path="/newsfeed" component={NewsFeed} />
+        {/* <Route path="/newsfeed" component={NewsFeed} /> */}
       </div>
     </BrowserRouter>
   );
