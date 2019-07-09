@@ -269,7 +269,7 @@ class SignUp extends Component {
                     {this.buttonContainer()}
                   </div>
                   <div style={style.signUpTextWrapper}>
-                    <p className='text-muted' style={style.signUpText}>Already have an account? <Link style={style.linkText} to='/login'>Sign In</Link> </p>
+                    <p className='text-muted' style={style.signUpText}>Already have an account? <Link style={style.linkText} to='/'>Sign In</Link> </p>
                   </div>
                 </FormControl>
               </div>

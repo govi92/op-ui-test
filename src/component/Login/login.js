@@ -234,7 +234,7 @@ class Login extends Component {
                     this.buttonContainer()
                   }
                   <div style={style.signUpTextWrapper}>
-                    <p className='text-muted' style={style.signUpText}>Don't have an account? <Link style={style.linkText} to='/'>Sign Up</Link> </p>
+                    <p className='text-muted' style={style.signUpText}>Don't have an account? <Link style={style.linkText} to='/signup'>Sign Up</Link> </p>
                   </div>
                 </FormControl>
               </div>

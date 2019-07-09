@@ -21,23 +21,29 @@ class CallBackLogin extends Component {
     } else {
       if(this.props.match.params.medium === 'facebook' || this.props.match.params.medium === 'google') {
         const res = await utils.loginCallBackURL(this.props.match.params.medium, this.props.location.search);
-        console.log(res);
         
-      if(res.status === 200) {
-        this.setState({
-          isOauthSuccessed: true,
-        });
-        
-        localStorage.setItem('loginCredentials', res.data.data );
-        this.props.history.push('/newsfeed');
-        // this.props.history.push('/dashboard');
-
-      } else {
-        this.props.history.push({
-          pathname: '/login',
-          state: {error: res.message}
-        });
-      }
+        if(res) {
+          if(res.status === 200) {
+            this.setState({
+              isOauthSuccessed: true,
+            });
+            
+            localStorage.setItem('loginCredentials', res.data.data );
+            this.props.history.push('/newsfeed');
+            // this.props.history.push('/dashboard');
+    
+          } else {
+            this.props.history.push({
+              pathname: '/',
+              state: {error: res.message}
+            });
+          }
+        } else {
+          this.props.history.push({
+            pathname: '/',
+            state: {error: 'You haven\'t registered before'}
+          });
+        }
       }
     }
   }
