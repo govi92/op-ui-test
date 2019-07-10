@@ -9,15 +9,13 @@ class TabContainer extends Component {
     lockStatus: false
   };
 
-  componentDidMount() {
-    console.log(this.props.lockState, this.props.name);
+  async componentDidMount() {
     this.setState({
       lockStatus: this.props.lockState
-    })
+    });
   };
 
   toggleLockState = async () => {
-    const { type, email } = this.props;
     const { lockStatus } = this.state;
     
     if(lockStatus === null) {

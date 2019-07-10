@@ -17,12 +17,43 @@ import MenuIcon from '@material-ui/icons/Menu';
 import LockIcon from '@material-ui/icons/Lock';
 import UnLockIcon from '@material-ui/icons/LockOpen';
 import TabContainer from './component/TabContainer';
+import CustomizeTab from './component/CustomizeTab';
 import * as utils from '../../utils/index';
 import { FETCH_USERS_LIST } from '../actions/types';
 import { fetchUserList } from '../actions/index'
 import store from '../store';
 import styles from './style'
 
+
+function UserPane (props) {  
+  const [value, setValue] = React.useState(0);
+
+  function handleChange(event, newValue) {
+    setValue(newValue);
+  }
+  const { name, email, mode, locked, onLockStateChange } = props;
+  console.log(name, email, mode, locked);
+  
+  return (
+    <div>
+      {
+        name &&
+        <Paper style={styles.tableBooth}>
+          <AppBar position='static'>
+            <Tabs value={value} onChange={handleChange}>
+              <Tab label='Overview' />
+              <Tab label='Customization' />
+              <Tab label='Domaine' />
+            </Tabs>
+          </AppBar>
+          {value === 0 && <TabContainer name={name} email={email} type={mode} lockState={locked} lockStatusChange={onLockStateChange} />}
+          {value === 1 && <CustomizeTab name={name} userType={mode} userId={email} />}
+          {value === 2 && <div>Item Three</div>}
+        </Paper>
+      }
+    </div>
+  );
+}
 
 class Dashboard extends Component {
 
@@ -42,6 +73,7 @@ class Dashboard extends Component {
 
   async componentDidMount() {
     const res = await utils.usersList();
+    
     if (res.data.data) {
       store.dispatch(fetchUserList({ type: FETCH_USERS_LIST, payload: res.data.data }));
       this.setState({
@@ -81,14 +113,15 @@ class Dashboard extends Component {
   onClick = (name, ref, mode, locked) => {
     this.setState({
       name, ref, mode, locked
-    });
+    }); 
   }
 
-  handleEventChange = name => event => {
+  handleChange = value => event => {
+    
     this.setState({
-      [name]: event.target.value,
-    });
-  };
+      value: event.target.value
+    })
+  }
 
   navbar = () => {
     return (
@@ -148,30 +181,10 @@ class Dashboard extends Component {
     );
   }
 
-  userPane = () => {
-    const { value, name, ref, mode, locked } = this.state;
-    return (
-      <div>
-        {
-          name &&
-          <Paper style={styles.tableBooth}>
-            <AppBar position='static'>
-              <Tabs value={value} onChange={this.handleEventChange}>
-                <Tab label='Overview' />
-                <Tab label='Customization' />
-                <Tab label='Domaine' />
-              </Tabs>
-            </AppBar>
-            {value === 0 && <TabContainer name={name} email={ref} type={mode} lockState={locked} lockStatusChange={this.onLockStateChange} />}
-            {value === 1 && <TabContainer>Item Two</TabContainer>}
-            {value === 2 && <TabContainer>Item Three</TabContainer>}
-          </Paper>
-        }
-      </div>
-    );
-  }
+  
 
   render() {
+    const { name, ref, mode, locked } = this.state;
     return (
       <div>
         {this.navbar()}
@@ -184,7 +197,7 @@ class Dashboard extends Component {
             </div>
             <div className='col-md-6'>
               <div style={styles.tableContainer}>
-                {this.userPane()}
+                <UserPane name={name} email={ref} mode={mode} locked={locked} onLockStateChange={this.onLockStateChange} />
               </div>
             </div>
           </div>

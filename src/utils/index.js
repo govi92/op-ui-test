@@ -194,7 +194,6 @@ export const refreshToken = async (params) => {
 };
 
 export const lockUserEndPoint = async(params) => {
-  // console.log("BEARER >>", store.getState().auth)
   try {
     return await axios.post('/news-api/v1/lock-user', {
       mode: params.mode,
@@ -227,6 +226,47 @@ export const usersList = async () => {
       return error.response
     });
   } catch (error) {
+    console.log(error);
+  }
+};
+
+export const getNewsFeedCustomizationBasedOnUser = async(props) => {
+  try {
+    return await axios.get(`/news-api/v1/dashboard-details/${props.ref}/${props.type}`, {
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `bearer ${store.getState().auth.accessToken}`
+      }
+    }).catch(function(error) {
+      console.log(error.response);
+      return error.response;
+    })
+  } catch(error) {
+    console.log(error);
+  }
+};
+
+export const setNewsFeedCustomizationBasedOnUser = async(props) => {
+  try {
+    return await axios.post(`/news-api/v1/dashboard-setup/`,{
+      'userRef': props.userId,
+      'userType': props.userType,
+      'logoURL': props.logoURL,
+      'organization': props.organization,
+      'bgColor': props.bgColorBase,
+      'fontColor': props.fontColorBase,
+      'newsfeedBGColor': props.newsFeedBGColor,
+      'newseedFontColor': props.newsFeedFontColor
+    }, {
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `bearer ${store.getState().auth.accessToken}`
+      }
+    }).catch(function(error) {
+      console.log(error.response);
+      return error.response;
+    })
+  } catch(error) {
     console.log(error);
   }
 }

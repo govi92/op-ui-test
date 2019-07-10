@@ -40,6 +40,10 @@ const style = {
 
   paneRow: {
     marginBottom: '30px'
+  },
+
+  colorPallete: {
+    marginBottom: '30px'
   }
 }
 

@@ -1,6 +1,5 @@
-import React, {Component} from 'react';
-import {List, ListItem, ListItemText, Avatar} from '@material-ui/core';
-import Footer from '../Footer';
+import React, { Component } from 'react';
+import { List, ListItem, ListItemText } from '@material-ui/core';
 import style from './style';
 import * as utils from '../../utils/index';
 
@@ -22,23 +21,22 @@ class NewsFeed extends Component {
 
   async componentDidMount() {
     const news = await utils.newsGallery();
-    
-   if( news !== false) {
-    this.setState({
-      news: news
-    });   
-   } 
+
+    if (news !== false) {
+      this.setState({
+        news: news
+      });
+    }
   };
 
   render() {
-    return(
-      // <div style={style.containerFluid}>
-        // <div style={style.newsContainer}>
-          <div>
-          {
-            this.state.news.map((news, i) => (
-              <div style={style.listContainer} key={i}>
-                <List style={style.listStyle} key={i}>
+    const { extendedStyle, listBackground } = this.props;
+    return (
+      <div style={listBackground ? extendedStyle : null}>
+        {
+          this.state.news.map((news, i) => (
+            <div style={style.listContainer} key={i}>
+              <List style={style.listStyle} key={i}>
                 <ListItem>
                   <div style={style.avatarConatainer}>
                     <img alt='' src={news.imageUrl} height="130" width="130" />
@@ -49,12 +47,10 @@ class NewsFeed extends Component {
                   </div>
                 </ListItem>
               </List>
-              </div>
-            ))
-          }
-          </div>
-        // </div>
-      // </div>
+            </div>
+          ))
+        }
+      </div>
     )
   };
 }

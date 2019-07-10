@@ -36,7 +36,7 @@ class Login extends Component {
     if (email !== '' && password !== '' && isEmailValid) {
       const response = await loginUser({ type, email, password });
       console.log(response);
-      
+
       if (response !== false) {
         this.setState({
           isEmailEmpty: false,
@@ -44,10 +44,13 @@ class Login extends Component {
           isEmailNotValid: false
         });
         localStorage.setItem('loginCredentials', response.accessToken);
-        if(response.role === 'super') {
+        if (response.role === 'super') {
           this.props.history.push('/dashboard');
         } else {
-          this.props.history.push('/home');
+          this.props.history.push({
+            pathname: '/home',
+            state: { ref: email, type: type }
+          });
         }
       } else {
         this.setState({
@@ -157,7 +160,7 @@ class Login extends Component {
             <div className='row'>
               <div className='col-md-6' style={style.newsContainer}>
                 <h2 style={style.newsFeedHeader}>LATEST NEWS</h2>
-                <div style={{height: '430px', overflowX: 'scroll'}}>
+                <div style={{ height: '430px', overflowX: 'scroll' }}>
                   <NewsFeed />
                 </div>
               </div>

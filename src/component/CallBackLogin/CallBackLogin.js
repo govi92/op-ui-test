@@ -27,10 +27,13 @@ class CallBackLogin extends Component {
             this.setState({
               isOauthSuccessed: true,
             });
+            console.log(res.data.data.ref);
             
             localStorage.setItem('loginCredentials', res.data.data );
-            this.props.history.push('/home');
-            // this.props.history.push('/dashboard');
+            this.props.history.push({
+              pathname: '/home',
+              state: {ref: res.data.data.userRef, type: res.data.data.userType }
+            });
     
           } else {
             this.props.history.push({
