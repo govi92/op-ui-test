@@ -50,7 +50,7 @@ class Selections extends Component {
     const {empAcc, name, organization, designation, accessToken} = this.state;
     if( empAcc !== '' &&  organization!== '' && designation!== '' && name !== '' && accessToken) {
       utils.registerCompanyDetails({empAcc, name, organization, designation, accessToken});
-      this.props.history.push('/login');
+      this.props.history.push('/');
     } 
     if (empAcc === '') {
       this.setState({

@@ -29,7 +29,7 @@ class CallBackLogin extends Component {
             });
             
             localStorage.setItem('loginCredentials', res.data.data );
-            this.props.history.push('/newsfeed');
+            this.props.history.push('/home');
             // this.props.history.push('/dashboard');
     
           } else {

@@ -47,7 +47,7 @@ class Login extends Component {
         if(response.role === 'super') {
           this.props.history.push('/dashboard');
         } else {
-          this.props.history.push('/newsfeed');
+          this.props.history.push('/home');
         }
       } else {
         this.setState({
