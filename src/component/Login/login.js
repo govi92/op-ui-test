@@ -28,6 +28,8 @@ class Login extends Component {
   }
 
   componentDidMount() {
+    console.log(Object.keys(this.props.location), this.props.location);
+    
     if(this.props.history.action === 'POP') {
       this.props.history.replace('', null)
     }
@@ -230,7 +232,7 @@ class Login extends Component {
                       </div>
                     }
                     {
-                      this.props.history.action === 'PUSH' &&
+                      this.props.location.state &&
                       <div>
                         <p style={style.exceptionErrorText}>
                           {this.props.location.state.error}
