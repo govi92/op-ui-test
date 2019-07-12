@@ -27,6 +27,12 @@ class Login extends Component {
     isCallBackErrorOccured: false
   }
 
+  componentDidMount() {
+    if(this.props.history.action === 'POP') {
+      this.props.history.replace('', null)
+    }
+  }
+
   login = async (event) => {
     event.preventDefault();
     const { type, email, password } = this.state;
@@ -35,7 +41,6 @@ class Login extends Component {
 
     if (email !== '' && password !== '' && isEmailValid) {
       const response = await loginUser({ type, email, password });
-      console.log(response);
 
       if (response !== false) {
         this.setState({
@@ -225,7 +230,7 @@ class Login extends Component {
                       </div>
                     }
                     {
-                      this.props.location.state &&
+                      this.props.history.action === 'PUSH' &&
                       <div>
                         <p style={style.exceptionErrorText}>
                           {this.props.location.state.error}

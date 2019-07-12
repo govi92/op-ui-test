@@ -19,13 +19,31 @@ class Home extends Component {
     if(this.props.location.state) {
       const display = await utils.getNewsFeedCustomizationBasedOnUser({ref: this.props.location.state.ref, type: this.props.location.state.type});
       if (display.data.data) {
-        this.setState({
-          bgColor: display.data.data.bgColor,
-          imgUrl: display.data.data.logoURL,
-          fontColor: display.data.data.fontColor,
-          newsfeedBGColor: display.data.data.newsfeedBGColor,
-          newsfeedFontColor: display.data.data.newsfeedFontColor
-        });
+        if(display.data.data.logoURL !== '') {
+          this.setState({
+            imgUrl: display.data.data.logoURL
+          });
+        }
+        if(display.data.data.bgColor !== '') {
+          this.setState({
+            bgColor: display.data.data.bgColor
+          });
+        }
+        if(display.data.data.fontColor !== '') {
+          this.setState({
+            fontColor: display.data.data.fontColor,
+          });
+        }
+        if(display.data.data.newsfeedBGColor !== '') {
+          this.setState({
+            newsfeedBGColor: display.data.data.newsfeedBGColor,
+          });
+        }
+        if(display.data.data.newsfeedFontColor !== '') {
+          this.setState({
+            newsfeedFontColor: display.data.data.newsfeedFontColor
+          });
+        }
       }
       console.log(display.data.data);
     }

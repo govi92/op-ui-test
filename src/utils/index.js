@@ -37,6 +37,7 @@ export const registerCompanyDetails = async (props) => {
         organization: props.organization,
         designation: props.designation,
         employeeCount: parseInt(props.empAcc),
+        toplevelDomain: props.domain,
         name: props.name
       },
       {
@@ -70,7 +71,6 @@ export const loginUser = async (props) => {
         return false;
       });
       console.log(response);
-      
     if(props.type === 'op') {
       if (response !== false) {
         const payload = response.data.data;
@@ -82,15 +82,13 @@ export const loginUser = async (props) => {
       }
     } else {
       if (response.data.success) {
-        console.log(response.data);
-        
         const payload = response.data;
         return {message: payload.message };
       } else {
         return false;
       }
     }
-
+    
   } catch (e) {
     console.log(e.stack);
   }
@@ -161,15 +159,18 @@ export const loginCallBackURL = async (medium, params) => {
   try {
     const res = await axios.get(`/news-api/v1/callback-${medium}-login${params}`)
     .catch(function(e) {
+      console.log(e.response);
+      
       return ({status: e.response.status, message: e.response.data.message})
     });
-    const payload = res.data.data;
-    store.dispatch(getUser({ type: LOGIN_USER, payload }));
-    console.log(res.data.data);
+    // const payload = res.data.data;
+    // store.dispatch(getUser({ type: LOGIN_USER, payload }));
+    // console.log(res.data.data);
     
     return res;
   } catch (error) {
     console.log(error);
+    return this.res;
   }
 };
 

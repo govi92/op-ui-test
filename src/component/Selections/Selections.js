@@ -14,13 +14,15 @@ class Selections extends Component {
     firstName: 'JOHN',
     lastName: 'DOE',
     errorStatus: '',
+    domain: '',
     isFormSubmitted: false,
     isErrorOccurred: false,
     errorMessage: '',
     isEmpAccEmpty: false,
     isOrgEmpty: false,
     isDesignationEmpty: false,
-    isNameEmpty: false
+    isNameEmpty: false,
+    isDomainEmpty: false
   }
 
   async componentDidMount() { 
@@ -47,9 +49,9 @@ class Selections extends Component {
 
   onSubmit = (event) => {
     event.preventDefault();
-    const {empAcc, name, organization, designation, accessToken} = this.state;
+    const {empAcc, name, organization, designation, accessToken, domain} = this.state;
     if( empAcc !== '' &&  organization!== '' && designation!== '' && name !== '' && accessToken) {
-      utils.registerCompanyDetails({empAcc, name, organization, designation, accessToken});
+      utils.registerCompanyDetails({empAcc, name, organization, designation, accessToken, domain});
       this.props.history.push('/');
     } 
     if (empAcc === '') {
@@ -68,6 +70,15 @@ class Selections extends Component {
     } else if (name !== '') {
       this.setState({
         isNameEmpty: false
+      });
+    }
+    if (domain === '') {
+      this.setState({
+        isDomainEmpty: true
+      });
+    } else if (domain !== '') {
+      this.setState({
+        isDomainEmpty: false
       });
     }
     if (organization === '') {
@@ -124,6 +135,21 @@ class Selections extends Component {
             {
               this.state.isNameEmpty &&
               <p style={style.errorText}>Name field shouldn't be empty</p>
+            }
+            <TextField
+              id="outlined-name"
+              label="Top Level Domain"
+              // className={}
+              value={null}
+              fullWidth
+              error={this.state.isDomainEmpty ? true : false}
+              onChange={this.handleEventChange('domain')}
+              margin="normal"
+              variant="outlined"
+            />
+            {
+              this.state.isDomainEmpty &&
+              <p style={style.errorText}>Top level domain shouldn't be empty</p>
             }
             <TextField
               id="outlined-name"

@@ -21,20 +21,17 @@ class CallBackLogin extends Component {
     } else {
       if(this.props.match.params.medium === 'facebook' || this.props.match.params.medium === 'google') {
         const res = await utils.loginCallBackURL(this.props.match.params.medium, this.props.location.search);
-        
+
         if(res) {
           if(res.status === 200) {
             this.setState({
               isOauthSuccessed: true,
             });
-            console.log(res.data.data.ref);
-            
-            localStorage.setItem('loginCredentials', res.data.data );
+            localStorage.setItem('loginCredentials', res.data.data );       
             this.props.history.push({
               pathname: '/home',
               state: {ref: res.data.data.userRef, type: res.data.data.userType }
-            });
-    
+            });    
           } else {
             this.props.history.push({
               pathname: '/',
@@ -44,7 +41,7 @@ class CallBackLogin extends Component {
         } else {
           this.props.history.push({
             pathname: '/',
-            state: {error: 'You haven\'t registered before'}
+            state: {error: res.message}
           });
         }
       }

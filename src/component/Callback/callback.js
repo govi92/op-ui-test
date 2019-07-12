@@ -31,28 +31,14 @@ class Callback extends Component {
           accessToken: response.data.data.accessToken
         });
         this.props.history.push(`/selections/${this.state.accessToken}`);
-        } else if(response.status === 500) {
+        } else {
           this.props.history.push({
             pathname: '/',
             state: {
               error: response.data.message
             }
           });
-        } else if(response.status === 403) {
-          this.props.history.push({
-            pathname: '/',
-            state: {
-              error: response.data.message
-            }
-          });
-        } else if(response.status === 400) {
-          this.props.history.push({
-            pathname: '/',
-            state: {
-              error: 'Bad Request, Please reregister to continue.'
-            }
-          });
-        };
+        }
       }
     }
   }

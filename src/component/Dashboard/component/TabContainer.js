@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { Typography, Button, List, ListItem, ListItemText } from '@material-ui/core';
-import * as utils from '../../../utils/index';
 import styles from '../style';
 
 
@@ -17,7 +16,6 @@ class TabContainer extends Component {
 
   toggleLockState = async () => {
     const { lockStatus } = this.state;
-    
     if(lockStatus === null) {
       this.setState({
         lockStatus: true
@@ -27,7 +25,6 @@ class TabContainer extends Component {
         lockStatus: !lockStatus
       });
     }
-    
   };
 
   render() {

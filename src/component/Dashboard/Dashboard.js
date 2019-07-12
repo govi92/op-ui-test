@@ -31,7 +31,7 @@ function UserPane (props) {
   function handleChange(event, newValue) {
     setValue(newValue);
   }
-  const { name, email, mode, locked, onLockStateChange } = props;
+  const { name, email, mode, locked, onLockStateChange, selectedUser } = props;
   console.log(name, email, mode, locked);
   
   return (
@@ -47,7 +47,7 @@ function UserPane (props) {
             </Tabs>
           </AppBar>
           {value === 0 && <TabContainer name={name} email={email} type={mode} lockState={locked} lockStatusChange={onLockStateChange} />}
-          {value === 1 && <CustomizeTab name={name} userType={mode} userId={email} />}
+          {value === 1 && <CustomizeTab name={name} userType={mode} userId={email} user={selectedUser} />}
           {value === 2 && <div>Item Three</div>}
         </Paper>
       }
@@ -64,11 +64,8 @@ class Dashboard extends Component {
     locked: false,
     value: 0,
     newValue: '',
-    users: [
-      { name: 'Govinda', mode: 'fb', ref: 'govinda@hello.com', locked: false, role: 'user' },
-      { name: 'Prashanth', mode: 'gl', ref: 'prashanth@hello.com', locked: false, role: 'user' },
-      { name: 'Para', mode: 'Open-provider', ref: 'para@hello.com', locked: true, role: 'user' }
-    ]
+    selectedUser: '',
+    users: []
   }
 
   async componentDidMount() {
@@ -110,9 +107,9 @@ class Dashboard extends Component {
       }, 1000);
   }
 
-  onClick = (name, ref, mode, locked) => {
+  onClick = (name, ref, mode, locked, user) => {
     this.setState({
-      name, ref, mode, locked
+      name, ref, mode, locked, selectedUser: user
     }); 
   }
 
@@ -162,7 +159,7 @@ class Dashboard extends Component {
               <TableRow
                 key={index}
                 hover
-                onClick={() => this.onClick(user.name, user.ref, user.mode, user.locked)}
+                onClick={() => this.onClick(user.name, user.ref, user.mode, user.locked, user)}
               >
                 <TableCell component="th" scope="row">
                   {user.name}
@@ -184,7 +181,7 @@ class Dashboard extends Component {
   
 
   render() {
-    const { name, ref, mode, locked } = this.state;
+    const { name, ref, mode, locked, selectedUser } = this.state;
     return (
       <div>
         {this.navbar()}
@@ -197,7 +194,7 @@ class Dashboard extends Component {
             </div>
             <div className='col-md-6'>
               <div style={styles.tableContainer}>
-                <UserPane name={name} email={ref} mode={mode} locked={locked} onLockStateChange={this.onLockStateChange} />
+                <UserPane name={name} email={ref} mode={mode} locked={locked} onLockStateChange={this.onLockStateChange} selectedUser={selectedUser}/>
               </div>
             </div>
           </div>
